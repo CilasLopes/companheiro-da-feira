@@ -186,7 +186,7 @@ export const Mercado = ({ products, producers = [], onNavigate, onAddToList, ite
       </header>
 
       {/* Conteúdo Principal */}
-      <main className={`${isSearching ? 'pt-[23px]' : 'pt-[48px]'} px-4`}>
+      <main className={`${isSearching ? 'pt-[16px]' : 'pt-[41px]'} px-4`}>
         {isLoading ? (
           <div className="grid grid-cols-2 gap-4">
             {[...Array(6)].map((_, i) => <ProductSkeleton key={i} />)}
