@@ -9,7 +9,9 @@ export function InstallPWA() {
 
   useEffect(() => {
     // Check if already installed
-    if (window.matchMedia('(display-mode: standalone)').matches) {
+    const isStandalone = window.matchMedia('(display-mode: standalone)').matches || (navigator as any).standalone;
+    if (isStandalone) {
+      console.log('App is already installed');
       return;
     }
 
@@ -17,25 +19,22 @@ export function InstallPWA() {
     const isIOSDevice = /iPad|iPhone|iPod/.test(navigator.userAgent) && !(window as any).MSStream;
     setIsIOS(isIOSDevice);
 
+    // Show prompt immediately if not installed
+    const hasDismissed = localStorage.getItem('pwa_prompt_dismissed');
+    if (!hasDismissed) {
+      setShowPrompt(true);
+    }
+
     // Listen for beforeinstallprompt
-    window.addEventListener('beforeinstallprompt', (e) => {
+    const handler = (e: any) => {
       e.preventDefault();
       setDeferredPrompt(e);
-      
-      // Show prompt after a short delay to not annoy the user immediately
-      const hasDismissed = localStorage.getItem('pwa_prompt_dismissed');
-      if (!hasDismissed) {
-        setTimeout(() => setShowPrompt(true), 3000);
-      }
-    });
+      console.log('beforeinstallprompt event fired');
+      setShowPrompt(true);
+    };
 
-    // For iOS, show the prompt manually if they haven't dismissed it
-    if (isIOSDevice) {
-      const hasDismissed = localStorage.getItem('pwa_prompt_dismissed');
-      if (!hasDismissed) {
-        setTimeout(() => setShowPrompt(true), 4000);
-      }
-    }
+    window.addEventListener('beforeinstallprompt', handler);
+    return () => window.removeEventListener('beforeinstallprompt', handler);
   }, []);
 
   const handleInstall = async () => {
@@ -121,13 +120,31 @@ export function InstallPWA() {
                     </p>
                   </div>
                 ) : (
-                  <button
-                    onClick={handleInstall}
-                    className="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-5 px-6 rounded-3xl transition-all shadow-xl shadow-emerald-200 active:scale-95 flex items-center justify-center gap-3 text-lg"
-                  >
-                    <Download size={24} />
-                    Instalar Aplicativo
-                  </button>
+                  <>
+                    {deferredPrompt ? (
+                      <button
+                        onClick={handleInstall}
+                        className="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-5 px-6 rounded-3xl transition-all shadow-xl shadow-emerald-200 active:scale-95 flex items-center justify-center gap-3 text-lg"
+                      >
+                        <Download size={24} />
+                        Instalar Aplicativo
+                      </button>
+                    ) : (
+                      <div className="space-y-4">
+                        <button
+                          disabled
+                          className="w-full bg-emerald-100 text-emerald-400 font-bold py-5 px-6 rounded-3xl flex items-center justify-center gap-3 text-lg cursor-not-allowed"
+                        >
+                          <div className="w-5 h-5 border-2 border-emerald-400 border-t-transparent rounded-full animate-spin" />
+                          Preparando Instalação...
+                        </button>
+                        <p className="text-[10px] text-emerald-400 font-medium">
+                          Se o botão não ativar, use o menu do navegador <br/>
+                          e selecione "Instalar Aplicativo"
+                        </p>
+                      </div>
+                    )}
+                  </>
                 )}
                 
                 {/* Opcional: Um botão de "Não agora" bem discreto se necessário, 
