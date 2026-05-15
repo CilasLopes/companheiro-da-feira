@@ -322,7 +322,7 @@ export const HomeViva = ({ onNavigate, products, fairSchedules, restaurants = []
                 className="shrink-0 w-72 bg-white border border-outline-variant/10 rounded-[40px] overflow-hidden shadow-sm"
               >
                 <div className="h-40 overflow-hidden relative">
-                  <RemoteImage src={producer.image} className="w-full h-full" alt={producer.name} />
+                  <RemoteImage src={producer.image} className="w-full h-full object-cover" alt={producer.name} />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
                   <span className="absolute bottom-4 left-4 bg-white/20 backdrop-blur-md text-white text-[9px] font-black uppercase tracking-widest px-3 py-1 rounded-full border border-white/20">
                     {producer.location}
