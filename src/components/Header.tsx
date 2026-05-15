@@ -59,13 +59,7 @@ export const Header = ({
             </button>
           )}
           <div className="flex items-center gap-3">
-            {!showBack && (
-              <img 
-                src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=200&auto=format&fit=crop" 
-                alt="Profile" 
-                className="w-10 h-10 rounded-full object-cover border-2 border-primary/20 shadow-sm"
-              />
-            )}
+
             <h1 className="font-display text-2xl font-semibold text-primary">{title}</h1>
           </div>
         </div>
