@@ -314,7 +314,7 @@ export const HomeViva = ({ onNavigate, products, fairSchedules, restaurants = []
             </button>
           </div>
           <div className="flex gap-4 overflow-x-auto scrollbar-hide pb-4 mask-edges px-1">
-            {producers.map((producer) => (
+            {producers.filter((p: any) => !p.hidden).map((producer) => (
               <motion.div 
                 key={producer.id}
                 whileTap={{ scale: 0.98 }}
