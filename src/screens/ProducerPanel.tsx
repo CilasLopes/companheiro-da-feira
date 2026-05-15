@@ -26,6 +26,7 @@ const NAV = [
 ];
 
 export const ProducerPanel = ({ producers, setProducers, products, setProducts, fairSchedules = [], onClose }: ProducerPanelProps) => {
+  const { t } = useTranslation();
   const [step, setStep] = useState<'login' | 'dashboard'>('login');
   const [loginType, setLoginType] = useState<'producer' | 'admin'>('producer');
   const [username, setUsername] = useState('');
@@ -351,7 +352,7 @@ export const ProducerPanel = ({ producers, setProducers, products, setProducts, 
                               <Check size={14} strokeWidth={4} />
                             </div>
                             <div className="text-left">
-                              <p className="text-xs font-black uppercase tracking-widest leading-none mb-1">{s.day}</p>
+                              <p className="text-xs font-black uppercase tracking-widest leading-none mb-1">{t(`home.days.${s.day}`)}</p>
                               <p className="text-[10px] font-bold opacity-60 leading-none">{s.location || 'Feira'}</p>
                             </div>
                           </button>
