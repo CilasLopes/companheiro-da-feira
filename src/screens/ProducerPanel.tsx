@@ -9,6 +9,20 @@ import {
   ChevronRight, BarChart2, Camera, Eye, EyeOff, Lock, Edit2
 } from 'lucide-react';
 
+// Auxiliar para garantir que os dias nos painéis internos sejam SEMPRE em Português
+const translateDayToPT = (day: string): string => {
+  if (!day) return '';
+  const ptDaysMap: { [key: string]: string } = {
+    'Sunday': 'Domingo', 'Monday': 'Segunda-feira', 'Tuesday': 'Terça-feira', 'Wednesday': 'Quarta-feira',
+    'Thursday': 'Quinta-feira', 'Friday': 'Sexta-feira', 'Saturday': 'Sábado',
+    'DOMINGO': 'Domingo', 'SEGUNDA': 'Segunda-feira', 'TERÇA': 'Terça-feira', 'QUARTA': 'Quarta-feira',
+    'QUINTA': 'Quinta-feira', 'SEXTA': 'Sexta-feira', 'SABADO': 'Sábado',
+    'Sábado': 'Sábado', 'Segunda': 'Segunda-feira', 'Terça': 'Terça-feira', 'Quarta': 'Quarta-feira', 'Quinta': 'Quinta-feira', 'Sexta': 'Sexta-feira'
+  };
+  return ptDaysMap[day] || ptDaysMap[day.toUpperCase()] || day;
+};
+
+
 
 interface ProducerPanelProps {
   producers: any[];
@@ -353,19 +367,7 @@ export const ProducerPanel = ({ producers, setProducers, products, setProducts, 
                             </div>
                             <div className="text-left">
                               <p className="text-xs font-black uppercase tracking-widest leading-none mb-1">
-                                {(() => {
-                                  const daysMap: { [key: string]: string } = {
-                                    'Sábado': 'Saturday', 'SABADO': 'Saturday', 'SATURDAY': 'Saturday',
-                                    'Domingo': 'Sunday', 'DOMINGO': 'Sunday', 'SUNDAY': 'Sunday',
-                                    'Segunda': 'Monday', 'SEGUNDA': 'Monday', 'MONDAY': 'Monday',
-                                    'Terça': 'Tuesday', 'TERÇA': 'Tuesday', 'TUESDAY': 'Tuesday',
-                                    'Quarta': 'Wednesday', 'QUARTA': 'Wednesday', 'WEDNESDAY': 'Wednesday',
-                                    'Quinta': 'Thursday', 'QUINTA': 'Thursday', 'THURSDAY': 'Thursday',
-                                    'Sexta': 'Friday', 'SEXTA': 'Friday', 'FRIDAY': 'Friday'
-                                  };
-                                  const key = daysMap[s.day] || daysMap[s.day.toUpperCase()] || s.day;
-                                  return t(`home.days.${key}`);
-                                })()}
+                                {translateDayToPT(s.day)}
                               </p>
                               <p className="text-[10px] font-bold opacity-60 leading-none">{s.location || 'Feira'}</p>
                             </div>

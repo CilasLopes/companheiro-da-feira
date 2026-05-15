@@ -13,6 +13,20 @@ import { ImageUploadField } from '../components/ImageUploadField';
 import { getGoogleDriveDirectLink } from '../utils/imageHelper';
 import { RemoteImage } from '../components/RemoteImage';
 
+// Auxiliar para garantir que os dias nos painéis internos sejam SEMPRE em Português
+const translateDayToPT = (day: string): string => {
+  if (!day) return '';
+  const ptDaysMap: { [key: string]: string } = {
+    'Sunday': 'Domingo', 'Monday': 'Segunda-feira', 'Tuesday': 'Terça-feira', 'Wednesday': 'Quarta-feira',
+    'Thursday': 'Quinta-feira', 'Friday': 'Sexta-feira', 'Saturday': 'Sábado',
+    'DOMINGO': 'Domingo', 'SEGUNDA': 'Segunda-feira', 'TERÇA': 'Terça-feira', 'QUARTA': 'Quarta-feira',
+    'QUINTA': 'Quinta-feira', 'SEXTA': 'Sexta-feira', 'SABADO': 'Sábado',
+    'Sábado': 'Sábado', 'Segunda': 'Segunda-feira', 'Terça': 'Terça-feira', 'Quarta': 'Quarta-feira', 'Quinta': 'Quinta-feira', 'Sexta': 'Sexta-feira'
+  };
+  return ptDaysMap[day] || ptDaysMap[day.toUpperCase()] || day;
+};
+
+
 const getAdminSections = () => [
   { id: 'hero', name: 'Banner Principal', icon: Layout, color: 'text-blue-500', bg: 'bg-blue-50' },
   { id: 'popup', name: 'Pop-up Inicial', icon: Gift, color: 'text-pink-500', bg: 'bg-pink-50' },
@@ -602,7 +616,7 @@ export const Admin = ({
                                 : 'bg-surface-container text-on-surface-variant hover:bg-outline-variant/20'
                             }`}
                           >
-                            {schedule.day.substring(0, 3)} - {schedule.location || 'Feira'}
+                            {translateDayToPT(schedule.day).substring(0, 3)} - {schedule.location || 'Feira'}
                           </button>
                         );
                       })
@@ -629,7 +643,7 @@ export const Admin = ({
                                 : 'bg-surface-container text-on-surface-variant hover:bg-outline-variant/20'
                             }`}
                           >
-                            {t(`home.days.${day}`).substring(0, 3)}
+                            {translateDayToPT(day).substring(0, 3)}
                           </button>
                         );
                       })
@@ -888,7 +902,7 @@ export const Admin = ({
                    className="w-full p-4 rounded-xl bg-surface border border-outline-variant/30 text-sm text-left flex justify-between items-center group hover:border-secondary transition-colors"
                 >
                   <span className={newSchedule.day ? "text-on-surface" : "text-on-surface-variant"}>
-                    {newSchedule.day ? t(`home.days.${newSchedule.day}`) : "Selecionar Dia"}
+                    {newSchedule.day ? translateDayToPT(newSchedule.day) : "Selecionar Dia"}
                   </span>
                   <Edit2 size={16} className="text-secondary opacity-0 group-hover:opacity-100 transition-opacity" />
                 </button>
@@ -1250,7 +1264,7 @@ export const Admin = ({
                     }}
                     className="w-full p-4 text-left font-medium hover:bg-primary/5 active:bg-primary/10 transition-colors border-b border-outline-variant/5 last:border-0"
                   >
-                    {t(`home.days.${day}`)}
+                    {translateDayToPT(day)}
                   </button>
                 ))}
               </div>
@@ -1665,7 +1679,7 @@ const ScheduleItem = ({ s, editingSchedule, setEditingSchedule, saveSchedule, de
               onClick={onOpenDayPicker}
               className="w-full p-3 rounded-xl bg-surface border border-outline-variant/30 text-sm text-left flex justify-between items-center"
             >
-              {t(`home.days.${editingSchedule.day}`)}
+              {translateDayToPT(editingSchedule.day)}
               <Edit2 size={14} className="text-secondary" />
             </button>
           </div>
@@ -1715,7 +1729,7 @@ const ScheduleItem = ({ s, editingSchedule, setEditingSchedule, saveSchedule, de
           <div className="flex items-center gap-2">
             <DragHandle controls={controls} />
             <div>
-              <p className="font-bold text-primary">{t(`home.days.${s.day}`)}</p>
+              <p className="font-bold text-primary">{translateDayToPT(s.day)}</p>
               <p className="text-xs text-on-surface-variant">{s.startTime} - {s.endTime} • {s.location}</p>
               {s.accessibility && <p className="text-[10px] text-primary/60 italic">{s.accessibility}</p>}
             </div>
