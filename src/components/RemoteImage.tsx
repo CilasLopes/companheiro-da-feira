@@ -45,8 +45,7 @@ export const RemoteImage: React.FC<RemoteImageProps> = ({ src, className, alt, f
             setLoading(false);
             setError(true);
           }}
-          className={`${className} ${loading ? 'opacity-0' : 'opacity-100'} transition-opacity duration-500`}
-          referrerPolicy="no-referrer"
+          className={`w-full h-full object-cover ${loading ? 'opacity-0' : 'opacity-100'} transition-opacity duration-500`}
           {...props}
         />
       ) : null}

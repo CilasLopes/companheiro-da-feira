@@ -5,7 +5,7 @@ export const getGoogleDriveDirectLink = (url: string): string => {
   // Se for um ID bruto (não é URL, mas tem o formato de ID do Drive)
   // IDs do Drive costumam ter entre 25 e 40 caracteres e são alfanuméricos
   if (!url.includes('/') && url.length > 20) {
-    return `https://drive.google.com/uc?export=view&id=${url}`;
+    return `https://lh3.googleusercontent.com/d/${url}`;
   }
 
   // Se já for um link direto (lh3), retorna original
@@ -32,7 +32,8 @@ export const getGoogleDriveDirectLink = (url: string): string => {
     }
 
     if (fileId) {
-      return `https://drive.google.com/uc?export=view&id=${fileId}`;
+      // Usar o endpoint lh3 que é muito mais estável para mobile e evita bloqueios de segurança
+      return `https://lh3.googleusercontent.com/d/${fileId}`;
     }
   } catch (e) {
     console.error('Erro ao processar URL do Drive:', e);
