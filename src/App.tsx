@@ -15,6 +15,7 @@ import { Lista } from './screens/Lista';
 import { Admin } from './screens/Admin';
 import { ProducerPanel } from './screens/ProducerPanel';
 import { isPriceFilled } from './utils/helpers';
+import { InstallPWA } from './components/InstallPWA';
 
 import { 
   defaultProducts, 
@@ -322,6 +323,7 @@ function App() {
 
       {/* Bottom Navigation */}
       <BottomNav activeTab={activeTab} setActiveTab={setActiveTab} listCount={items.length} />
+      <InstallPWA />
 
       <AnimatePresence>
         {showWelcome && (
