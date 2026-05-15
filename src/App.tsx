@@ -336,7 +336,9 @@ function App() {
 
       {/* Bottom Navigation */}
       {!isLoading && <BottomNav activeTab={activeTab} setActiveTab={setActiveTab} listCount={items.length} />}
-      {!isLoading && <InstallPWA />}
+
+      {/* PWA Install prompt - always mounted, controls its own visibility */}
+      <InstallPWA />
 
       <AnimatePresence>
         {showWelcome && (

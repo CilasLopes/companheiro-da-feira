@@ -1,87 +1,88 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { Download, X, Share, PlusSquare } from 'lucide-react';
+import { Download, Share, PlusSquare, Smartphone } from 'lucide-react';
 
 export function InstallPWA() {
   const [deferredPrompt, setDeferredPrompt] = useState<any>(null);
   const [showPrompt, setShowPrompt] = useState(false);
   const [isIOS, setIsIOS] = useState(false);
-  const [isReady, setIsReady] = useState(false);
+  const [promptReady, setPromptReady] = useState(false);
 
   useEffect(() => {
-    // Check if already installed
-    const isStandalone = window.matchMedia('(display-mode: standalone)').matches || (navigator as any).standalone;
-    if (isStandalone) {
-      console.log('App is already installed');
+    // Check if already installed as standalone
+    const isStandalone =
+      window.matchMedia('(display-mode: standalone)').matches ||
+      (navigator as any).standalone === true;
+
+    if (isStandalone) return;
+
+    // Check if user already dismissed
+    const hasDismissed = localStorage.getItem('pwa_prompt_dismissed');
+    if (hasDismissed) return;
+
+    // Detect iOS
+    const isIOSDevice =
+      /iPad|iPhone|iPod/.test(navigator.userAgent) &&
+      !(window as any).MSStream;
+    setIsIOS(isIOSDevice);
+
+    // For iOS: show prompt immediately (no native install event)
+    if (isIOSDevice) {
+      setShowPrompt(true);
+      setPromptReady(true);
       return;
     }
 
-    // Check if iOS
-    const isIOSDevice = /iPad|iPhone|iPod/.test(navigator.userAgent) && !(window as any).MSStream;
-    setIsIOS(isIOSDevice);
-
-    // Show prompt immediately if not installed
-    const hasDismissed = localStorage.getItem('pwa_prompt_dismissed');
-    if (!hasDismissed) {
-      setShowPrompt(true);
-    }
-
-    // Safety timeout: if event doesn't fire in 4s, show manual instructions
-    const timer = setTimeout(() => {
-      setIsReady(true);
-      console.log('PWA: Ready timer triggered');
-    }, 4000);
-
-    // Listen for beforeinstallprompt
-    const handler = (e: any) => {
+    // For Android/Desktop: listen for the native install event
+    const handler = (e: Event) => {
       e.preventDefault();
       setDeferredPrompt(e);
-      setIsReady(true);
-      console.log('beforeinstallprompt event fired');
+      setPromptReady(true);
       setShowPrompt(true);
     };
 
     window.addEventListener('beforeinstallprompt', handler);
+
+    // Fallback: if event doesn't fire in 6 seconds, show manual instructions
+    const fallbackTimer = setTimeout(() => {
+      setPromptReady(true);
+      setShowPrompt(true);
+    }, 6000);
+
     return () => {
       window.removeEventListener('beforeinstallprompt', handler);
-      clearTimeout(timer);
+      clearTimeout(fallbackTimer);
     };
   }, []);
 
   const handleInstall = async () => {
     if (!deferredPrompt) {
-      // Prompt não disponível — mostra instruções manuais
+      // No native prompt available — show manual instructions
       setDeferredPrompt(null);
-      setIsReady(true);
       return;
     }
-    
+
     try {
-      await deferredPrompt.prompt();
-      const { outcome } = await deferredPrompt.userChoice;
-      
-      if (outcome === 'accepted') {
-        console.log('User accepted the install prompt');
+      deferredPrompt.prompt();
+      const choiceResult = await deferredPrompt.userChoice;
+
+      if (choiceResult.outcome === 'accepted') {
         setShowPrompt(false);
-      } else {
-        console.log('User dismissed the install prompt');
-        // Mostrar instrução manual já que o prompt foi recusado
-        setIsReady(true);
       }
     } catch (err) {
-      console.error('Install prompt failed:', err);
-      // Fallback: mostrar instruções manuais
-      setIsReady(true);
+      console.error('PWA install error:', err);
     }
-    
-    // Limpar referência — prompt só pode ser usado uma vez
+
+    // Prompt can only be used once
     setDeferredPrompt(null);
   };
 
-  const dismissPrompt = () => {
+  const handleDismiss = () => {
     setShowPrompt(false);
     localStorage.setItem('pwa_prompt_dismissed', 'true');
   };
+
+  if (!showPrompt) return null;
 
   return (
     <AnimatePresence>
@@ -90,108 +91,92 @@ export function InstallPWA() {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          className="fixed inset-0 z-[2000] flex items-center justify-center p-4 bg-emerald-950/40 backdrop-blur-xl"
+          transition={{ duration: 0.3 }}
+          className="fixed inset-0 z-[2000] flex items-end sm:items-center justify-center bg-black/50"
         >
+          {/* Tap outside to dismiss */}
+          <div className="absolute inset-0" onClick={handleDismiss} />
+
           <motion.div
-            initial={{ scale: 0.9, y: 20 }}
-            animate={{ scale: 1, y: 0 }}
-            className="bg-white w-full max-w-sm rounded-[32px] shadow-2xl relative overflow-hidden flex flex-col max-h-[90vh]"
+            initial={{ y: 100, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            exit={{ y: 100, opacity: 0 }}
+            transition={{ type: 'spring', damping: 25, stiffness: 300 }}
+            className="relative bg-white w-full max-w-md rounded-t-3xl sm:rounded-3xl shadow-2xl overflow-hidden"
           >
-            {/* Background pattern - Reduced height */}
-            <div className="shrink-0 h-24 bg-emerald-600 flex items-center justify-center overflow-hidden relative">
-              <motion.div 
-                animate={{ rotate: 360 }}
-                transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
-                className="absolute w-48 h-48 border-[15px] border-emerald-500/30 rounded-full"
-              />
-              <div className="relative w-14 h-14 bg-white rounded-2xl shadow-lg flex items-center justify-center text-emerald-600">
-                <Download size={28} />
+            {/* Green header */}
+            <div className="bg-gradient-to-br from-emerald-500 to-emerald-700 px-6 pt-6 pb-8 text-center text-white">
+              <div className="w-16 h-16 bg-white/20 backdrop-blur rounded-2xl mx-auto flex items-center justify-center mb-4">
+                <Smartphone size={32} className="text-white" />
               </div>
+              <h2 className="text-2xl font-bold">
+                Instale o App
+              </h2>
+              <p className="mt-1 text-emerald-100 text-sm">
+                Acesse mais rápido direto da sua tela inicial
+              </p>
             </div>
 
-            <div className="p-6 overflow-y-auto custom-scrollbar flex flex-col items-center">
-              <div className="text-center">
-                <h2 className="text-2xl font-display font-black text-emerald-950 leading-tight">
-                  Instale para <span className="text-emerald-600">Começar</span>
-                </h2>
-                <p className="mt-2 text-emerald-700 font-medium text-base">
-                  Para a melhor experiência na feira, instale nosso app.
-                </p>
-
-                <div className="mt-6 space-y-3">
-                  <div className="flex items-center gap-3 text-left bg-emerald-50 p-3 rounded-2xl border border-emerald-100">
-                    <div className="w-8 h-8 bg-emerald-600 rounded-full flex items-center justify-center text-white shrink-0">
-                      <PlusSquare size={16} />
-                    </div>
-                    <div>
-                      <p className="text-emerald-900 font-bold text-sm">Acesso Instantâneo</p>
-                      <p className="text-emerald-700 text-xs">Na sua tela inicial.</p>
-                    </div>
-                  </div>
-
-                  <div className="flex items-center gap-3 text-left bg-emerald-50 p-3 rounded-2xl border border-emerald-100">
-                    <div className="w-8 h-8 bg-emerald-600 rounded-full flex items-center justify-center text-white shrink-0">
-                      <Share size={16} />
-                    </div>
-                    <div>
-                      <p className="text-emerald-900 font-bold text-sm">Modo Offline</p>
-                      <p className="text-emerald-700 text-xs">Mesmo sem internet.</p>
-                    </div>
-                  </div>
+            {/* Content */}
+            <div className="px-6 py-5 space-y-3">
+              <div className="flex items-center gap-3 bg-emerald-50 p-3 rounded-xl">
+                <div className="w-9 h-9 bg-emerald-600 rounded-full flex items-center justify-center text-white shrink-0">
+                  <PlusSquare size={18} />
                 </div>
+                <div>
+                  <p className="text-emerald-900 font-semibold text-sm">Acesso Instantâneo</p>
+                  <p className="text-emerald-600 text-xs">Abra direto da tela inicial.</p>
+                </div>
+              </div>
 
-                <div className="mt-6">
-                  {isIOS ? (
-                    <div className="bg-emerald-600 text-white p-4 rounded-2xl shadow-lg">
-                      <p className="text-sm font-bold flex flex-wrap items-center justify-center gap-2 leading-relaxed text-center">
-                        Toque em <Share size={18} /> e selecione <br/>
-                        <span className="bg-white/20 px-2 py-1 rounded-lg">"Adicionar à Tela de Início"</span>
-                      </p>
-                    </div>
-                  ) : (
-                    <div className="w-full">
-                      {deferredPrompt ? (
-                        <button
-                          onClick={handleInstall}
-                          className="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-4 px-6 rounded-2xl transition-all shadow-lg active:scale-95 flex items-center justify-center gap-3 text-base"
-                        >
-                          <Download size={20} />
-                          Instalar Aplicativo
-                        </button>
-                      ) : (
-                        <div className="space-y-3">
-                          {!isReady ? (
-                            <button
-                              disabled
-                              className="w-full bg-emerald-50 text-emerald-300 font-bold py-4 px-6 rounded-2xl flex items-center justify-center gap-3 text-base cursor-wait"
-                            >
-                              <div className="w-4 h-4 border-2 border-emerald-300 border-t-transparent rounded-full animate-spin" />
-                              Preparando...
-                            </button>
-                          ) : (
-                            <div className="bg-emerald-600 text-white p-4 rounded-2xl shadow-lg">
-                              <p className="text-sm font-bold leading-relaxed text-center">
-                                No menu do navegador (<span className="inline-block border border-white/40 rounded px-1">⋮</span> ou <span className="inline-block border border-white/40 rounded px-1">≡</span>) selecione: <br/>
-                                <span className="bg-white/20 px-2 py-1 rounded-lg mt-1.5 inline-block">"Instalar Aplicativo"</span>
-                              </p>
-                            </div>
-                          )}
-                        </div>
-                      )}
-                    </div>
-                  )}
-                  
-                  <button 
-                    onClick={() => setShowPrompt(false)}
-                    className="mt-5 text-emerald-400 text-xs font-bold uppercase tracking-widest hover:text-emerald-600 transition-colors"
-                  >
-                    Talvez mais tarde
-                  </button>
+              <div className="flex items-center gap-3 bg-emerald-50 p-3 rounded-xl">
+                <div className="w-9 h-9 bg-emerald-600 rounded-full flex items-center justify-center text-white shrink-0">
+                  <Download size={18} />
+                </div>
+                <div>
+                  <p className="text-emerald-900 font-semibold text-sm">Funciona Offline</p>
+                  <p className="text-emerald-600 text-xs">Consulte feiras sem internet.</p>
                 </div>
               </div>
             </div>
 
-            <div className="absolute -bottom-12 -right-12 w-32 h-32 bg-emerald-100/50 rounded-full -z-10" />
+            {/* Action buttons */}
+            <div className="px-6 pb-6 pt-2">
+              {isIOS ? (
+                <div className="bg-emerald-600 text-white p-4 rounded-2xl text-center">
+                  <p className="text-sm font-semibold leading-relaxed">
+                    Toque em <Share size={16} className="inline -mt-0.5" /> e depois em<br />
+                    <span className="bg-white/20 px-3 py-1 rounded-lg mt-1 inline-block">
+                      "Adicionar à Tela de Início"
+                    </span>
+                  </p>
+                </div>
+              ) : deferredPrompt ? (
+                <button
+                  onClick={handleInstall}
+                  className="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-4 rounded-2xl transition-all active:scale-[0.98] flex items-center justify-center gap-2 text-base shadow-lg shadow-emerald-200"
+                >
+                  <Download size={20} />
+                  Instalar Agora
+                </button>
+              ) : (
+                <div className="bg-emerald-600 text-white p-4 rounded-2xl text-center">
+                  <p className="text-sm font-semibold leading-relaxed">
+                    No menu do navegador (<span className="font-mono">⋮</span>) selecione:<br />
+                    <span className="bg-white/20 px-3 py-1 rounded-lg mt-1 inline-block">
+                      "Instalar Aplicativo"
+                    </span>
+                  </p>
+                </div>
+              )}
+
+              <button
+                onClick={handleDismiss}
+                className="w-full mt-3 py-3 text-emerald-500 text-sm font-semibold hover:text-emerald-700 transition-colors"
+              >
+                Agora não
+              </button>
+            </div>
           </motion.div>
         </motion.div>
       )}
