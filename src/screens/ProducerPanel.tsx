@@ -115,7 +115,7 @@ export const ProducerPanel = ({ producers, setProducers, products, setProducts, 
     setActiveTab('overview'); setLoginError('');
   };
 
-  const { t } = useTranslation();
+
 
   // Per-day presence toggle
   const toggleDay = (dayId: string) => {

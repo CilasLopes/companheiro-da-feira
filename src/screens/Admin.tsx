@@ -678,6 +678,7 @@ export const Admin = ({
                         saveProducer={saveProducer} 
                         deleteProducer={deleteProducer} 
                         toggleHidden={() => setProducers(producers.map((prod: any) => prod.id === p.id ? { ...prod, hidden: !prod.hidden } : prod))}
+                        fairSchedules={fairSchedules}
                       />
                     ))}
                   </Reorder.Group>
@@ -1800,7 +1801,7 @@ const HeroSlideItem = ({ slide, editingHeroSlide, setEditingHeroSlide, saveHeroS
   );
 };
 
-const ProducerItem = ({ p, editingProducer, setEditingProducer, saveProducer, deleteProducer, toggleHidden }: any) => {
+const ProducerItem = ({ p, editingProducer, setEditingProducer, saveProducer, deleteProducer, toggleHidden, fairSchedules }: any) => {
   const controls = useDragControls();
   return (
     <Reorder.Item 
