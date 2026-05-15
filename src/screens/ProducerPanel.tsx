@@ -12,17 +12,21 @@ import {
 // Auxiliar para garantir que os dias nos painéis internos sejam SEMPRE em Português
 const translateDayToPT = (day: string): string => {
   if (!day) return '';
+  const d = day.trim().toUpperCase();
+  
+  if (d.includes('SAT') || d.includes('SÁB') || d.includes('SAB')) return 'Sábado';
+  if (d.includes('SUN') || d.includes('DOM')) return 'Domingo';
+  if (d.includes('MON') || d.includes('SEG')) return 'Segunda-feira';
+  if (d.includes('TUE') || d.includes('TER')) return 'Terça-feira';
+  if (d.includes('WED') || d.includes('QUA')) return 'Quarta-feira';
+  if (d.includes('THU') || d.includes('QUI')) return 'Quinta-feira';
+  if (d.includes('FRI') || d.includes('SEX')) return 'Sexta-feira';
+
   const ptDaysMap: { [key: string]: string } = {
     'SUNDAY': 'Domingo', 'MONDAY': 'Segunda-feira', 'TUESDAY': 'Terça-feira', 'WEDNESDAY': 'Quarta-feira',
-    'THURSDAY': 'Quinta-feira', 'FRIDAY': 'Sexta-feira', 'SATURDAY': 'Sábado',
-    'Sunday': 'Domingo', 'Monday': 'Segunda-feira', 'Tuesday': 'Terça-feira', 'Wednesday': 'Quarta-feira',
-    'Thursday': 'Quinta-feira', 'Friday': 'Sexta-feira', 'Saturday': 'Sábado',
-    'DOMINGO': 'Domingo', 'SEGUNDA': 'Segunda-feira', 'TERÇA': 'Terça-feira', 'QUARTA': 'Quarta-feira',
-    'QUINTA': 'Quinta-feira', 'SEXTA': 'Sexta-feira', 'SABADO': 'Sábado',
-    'Sábado': 'Sábado', 'Segunda': 'Segunda-feira', 'Terça': 'Terça-feira', 'Quarta': 'Quarta-feira', 'Quinta': 'Quinta-feira', 'Sexta': 'Sexta-feira'
+    'THURSDAY': 'Quinta-feira', 'FRIDAY': 'Sexta-feira', 'SATURDAY': 'Sábado'
   };
-  const normalized = day.toUpperCase();
-  return ptDaysMap[normalized] || ptDaysMap[day] || day;
+  return ptDaysMap[d] || day;
 };
 
 
@@ -272,12 +276,12 @@ export const ProducerPanel = ({ producers, setProducers, products, setProducts, 
 
       {/* ── SIDEBAR ── */}
       <div className="w-full md:w-80 bg-surface-container-low border-b md:border-b-0 md:border-r border-outline-variant/20 flex flex-col shrink-0 md:h-full">
-        <div className="p-8 flex items-center justify-between">
+        <div className="p-4 md:p-8 flex items-center justify-between">
           <div className="flex items-center gap-4">
             <div className="relative">
               <RemoteImage src={loggedProducer.image || 'https://images.unsplash.com/photo-1595033003999-ed49fe57159c?auto=format&fit=crop&q=80&w=200'}
-                alt={loggedProducer.name} className="w-14 h-14 rounded-[22px] object-cover border-2 border-primary/20 shadow-md" />
-              <div className="absolute -bottom-1 -right-1 w-6 h-6 bg-emerald-500 rounded-full border-4 border-surface flex items-center justify-center">
+                alt={loggedProducer.name} className="w-10 h-10 md:w-14 md:h-14 rounded-[18px] md:rounded-[22px] object-cover border-2 border-primary/20 shadow-md" />
+              <div className="absolute -bottom-1 -right-1 w-5 h-5 md:w-6 md:h-6 bg-emerald-500 rounded-full border-2 md:border-4 border-surface flex items-center justify-center">
                 <div className="w-1.5 h-1.5 bg-white rounded-full animate-pulse" />
               </div>
             </div>
@@ -297,18 +301,18 @@ export const ProducerPanel = ({ producers, setProducers, products, setProducts, 
           </button>
         </div>
 
-        <nav className="px-4 py-2 space-y-1 md:flex-1 md:overflow-y-auto">
+        <nav className="px-4 py-2 flex md:flex-col overflow-x-auto md:overflow-x-visible md:flex-1 md:overflow-y-auto scrollbar-none gap-1">
           {NAV.map(item => {
             const Icon = item.icon;
             const isActive = activeTab === item.id;
             return (
               <button key={item.id} onClick={() => setActiveTab(item.id)}
-                className={`w-full flex items-center gap-4 px-5 py-4 rounded-2xl transition-all group ${
+                className={`flex items-center gap-3 md:gap-4 px-4 md:px-5 py-3 md:py-4 rounded-xl md:rounded-2xl transition-all group whitespace-nowrap shrink-0 md:w-full ${
                   isActive ? 'bg-primary text-white shadow-lg shadow-primary/20' : 'text-on-surface-variant hover:bg-surface-container hover:text-on-surface'
                 }`}>
-                <Icon size={20} className={isActive ? 'text-white' : 'group-hover:text-primary transition-colors'} />
-                <span className="font-bold text-sm tracking-tight">{item.label}</span>
-                {isActive && <ChevronRight size={16} className="ml-auto opacity-60" />}
+                <Icon size={isActive ? 18 : 20} className={isActive ? 'text-white' : 'group-hover:text-primary transition-colors'} />
+                <span className="font-bold text-xs md:text-sm tracking-tight">{item.label}</span>
+                {isActive && <ChevronRight size={16} className="ml-auto opacity-60 hidden md:block" />}
               </button>
             );
           })}

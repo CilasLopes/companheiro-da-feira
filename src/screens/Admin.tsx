@@ -16,17 +16,21 @@ import { RemoteImage } from '../components/RemoteImage';
 // Auxiliar para garantir que os dias nos painéis internos sejam SEMPRE em Português
 const translateDayToPT = (day: string): string => {
   if (!day) return '';
+  const d = day.trim().toUpperCase();
+  
+  if (d.includes('SAT') || d.includes('SÁB') || d.includes('SAB')) return 'Sábado';
+  if (d.includes('SUN') || d.includes('DOM')) return 'Domingo';
+  if (d.includes('MON') || d.includes('SEG')) return 'Segunda-feira';
+  if (d.includes('TUE') || d.includes('TER')) return 'Terça-feira';
+  if (d.includes('WED') || d.includes('QUA')) return 'Quarta-feira';
+  if (d.includes('THU') || d.includes('QUI')) return 'Quinta-feira';
+  if (d.includes('FRI') || d.includes('SEX')) return 'Sexta-feira';
+
   const ptDaysMap: { [key: string]: string } = {
     'SUNDAY': 'Domingo', 'MONDAY': 'Segunda-feira', 'TUESDAY': 'Terça-feira', 'WEDNESDAY': 'Quarta-feira',
-    'THURSDAY': 'Quinta-feira', 'FRIDAY': 'Sexta-feira', 'SATURDAY': 'Sábado',
-    'Sunday': 'Domingo', 'Monday': 'Segunda-feira', 'Tuesday': 'Terça-feira', 'Wednesday': 'Quarta-feira',
-    'Thursday': 'Quinta-feira', 'Friday': 'Sexta-feira', 'Saturday': 'Sábado',
-    'DOMINGO': 'Domingo', 'SEGUNDA': 'Segunda-feira', 'TERÇA': 'Terça-feira', 'QUARTA': 'Quarta-feira',
-    'QUINTA': 'Quinta-feira', 'SEXTA': 'Sexta-feira', 'SABADO': 'Sábado',
-    'Sábado': 'Sábado', 'Segunda': 'Segunda-feira', 'Terça': 'Terça-feira', 'Quarta': 'Quarta-feira', 'Quinta': 'Quinta-feira', 'Sexta': 'Sexta-feira'
+    'THURSDAY': 'Quinta-feira', 'FRIDAY': 'Sexta-feira', 'SATURDAY': 'Sábado'
   };
-  const normalized = day.toUpperCase();
-  return ptDaysMap[normalized] || ptDaysMap[day] || day;
+  return ptDaysMap[d] || day;
 };
 
 
@@ -1845,7 +1849,7 @@ const ProducerItem = ({ p, editingProducer, setEditingProducer, saveProducer, de
                           : 'bg-surface-container text-on-surface-variant'
                       }`}
                     >
-                      {schedule.day.substring(0, 3)}
+                      {translateDayToPT(schedule.day).substring(0, 3)}
                     </button>
                   );
                 })
@@ -1872,7 +1876,7 @@ const ProducerItem = ({ p, editingProducer, setEditingProducer, saveProducer, de
                           : 'bg-surface-container text-on-surface-variant'
                       }`}
                     >
-                      {t(`home.days.${day}`).substring(0, 3)}
+                      {translateDayToPT(day).substring(0, 3)}
                     </button>
                   );
                 })
