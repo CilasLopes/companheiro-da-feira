@@ -11,7 +11,6 @@ export const BottomNav = ({ activeTab, setActiveTab, listCount = 0 }: { activeTa
     { id: 'market', icon: ShoppingBag, label: t('footer.market'), gradientFrom: '#EA580C', gradientTo: '#FB923C' },
     { id: 'explorar', icon: Map, label: t('footer.map'), gradientFrom: '#4D7C0F', gradientTo: '#84CC16' },
     { id: 'list', icon: ClipboardList, label: t('footer.list'), gradientFrom: '#92400E', gradientTo: '#D97706' },
-    { id: 'profile', icon: User, label: 'Painel', gradientFrom: '#7C3AED', gradientTo: '#A78BFA' },
   ];
 
   return (

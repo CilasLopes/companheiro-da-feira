@@ -70,6 +70,16 @@ export const Header = ({
           </div>
         </div>
         <div className="flex items-center gap-1">
+          {onProducerClick && (
+            <button 
+              onClick={onProducerClick}
+              className="p-2.5 rounded-full active:scale-95 transition-all text-primary"
+              title="Login"
+            >
+              <User size={24} />
+            </button>
+          )}
+
           {/* Seletor de Idioma */}
           <div className="relative">
             <button 

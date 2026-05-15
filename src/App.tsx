@@ -31,6 +31,7 @@ function App() {
   const { t } = useTranslation();
   const [activeTab, setActiveTab] = useState('home');
   const [showAdmin, setShowAdmin] = useState(false);
+  const [showProducerPanel, setShowProducerPanel] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const [savedLists, setSavedLists] = useState(() => {
     const saved = localStorage.getItem('savedLists');
@@ -257,7 +258,6 @@ function App() {
       case 'list': return t('list.title');
       case 'partners': return t('home.partners_title');
       case 'producers': return t('home.who_makes_title');
-      case 'profile': return 'Painel';
       default: return t('app_name');
     }
   };
@@ -276,17 +276,6 @@ function App() {
         return <Parceiros restaurants={restaurants} appSettings={appSettings} />;
       case 'producers':
         return <Produtores producers={producers} fairSchedules={fairSchedules} />;
-      case 'profile':
-        return (
-          <ProducerPanel 
-            producers={producers} 
-            setProducers={setProducers} 
-            products={products} 
-            setProducts={setProducts} 
-            fairSchedules={fairSchedules}
-            onClose={() => setActiveTab('home')}
-          />
-        );
       case 'list':
         return <Lista items={items} setItems={setItems} savedLists={savedLists} setSavedLists={setSavedLists} />;
       default:
@@ -310,6 +299,7 @@ function App() {
           title={getPageTitle()} 
           showBack={activeTab !== 'home'} 
           onBack={() => setActiveTab('home')}
+          onProducerClick={() => setShowProducerPanel(true)}
           notifications={notifications}
           setNotifications={setNotifications}
         />
@@ -370,7 +360,18 @@ function App() {
         )}
       </AnimatePresence>
 
-
+      <AnimatePresence>
+        {showProducerPanel && (
+          <ProducerPanel
+            producers={producers}
+            setProducers={setProducers}
+            products={products}
+            setProducts={setProducts}
+            fairSchedules={fairSchedules}
+            onClose={() => setShowProducerPanel(false)}
+          />
+        )}
+      </AnimatePresence>
 
       <AnimatePresence>
         {showAdmin && (

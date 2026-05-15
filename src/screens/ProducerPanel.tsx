@@ -56,7 +56,7 @@ export const ProducerPanel = ({ producers, setProducers, products, setProducts, 
   const handleLogin = () => {
     setLoginError('');
     
-    // LOGIN COMO GESTOR (ADMIN)
+    // LOGIN COMO ADMIN
     if (loginType === 'admin') {
       if (username.trim().toLowerCase() === 'admin' && password.trim() === 'feira123') {
         if ((window as any).showAdminPanel) {
@@ -66,12 +66,12 @@ export const ProducerPanel = ({ producers, setProducers, products, setProducts, 
         }
         return;
       } else {
-        setLoginError('Credenciais de Gestor incorretas.');
+        setLoginError('Credenciais de Admin incorretas.');
         return;
       }
     }
 
-    // LOGIN COMO EXPOSITOR (PRODUTOR)
+    // LOGIN COMO PRODUTOR
     const found = producers.find(
       p => p.username && p.password &&
         p.username.trim().toLowerCase() === username.trim().toLowerCase() &&
@@ -82,7 +82,7 @@ export const ProducerPanel = ({ producers, setProducers, products, setProducts, 
       setProfile({ ...found });
       setStep('dashboard');
     } else {
-      setLoginError('Usuário ou senha de Expositor incorretos.');
+      setLoginError('Usuário ou senha de Produtor incorretos.');
     }
   };
 
@@ -155,11 +155,17 @@ export const ProducerPanel = ({ producers, setProducers, products, setProducts, 
           </div>
           <div>
             <h1 className="font-display text-xl font-bold text-primary leading-none">
-              {loginType === 'admin' ? 'Painel de Gestão' : 'Área do Expositor'}
+              {loginType === 'admin' ? 'Painel Admin' : 'Área do Produtor'}
             </h1>
-            <p className="text-[10px] text-on-surface-variant font-bold uppercase tracking-wider mt-1 opacity-60">Acesso Privado</p>
+            <p className="text-[10px] text-on-surface-variant font-bold uppercase tracking-wider mt-1 opacity-60">Acesso Restrito</p>
           </div>
         </div>
+        <button 
+          onClick={onClose}
+          className="p-2 bg-surface-container hover:bg-surface-container-high rounded-full text-on-surface-variant transition-colors"
+        >
+          <X size={20} />
+        </button>
       </div>
 
       <div className="flex-1 flex flex-col items-center justify-center px-8 space-y-10">
@@ -172,20 +178,20 @@ export const ProducerPanel = ({ producers, setProducers, products, setProducts, 
                 onClick={() => { setLoginType('producer'); setLoginError(''); }}
                 className={`px-8 py-3 rounded-[18px] text-[11px] font-black uppercase tracking-[0.1em] transition-all duration-300 ${loginType === 'producer' ? 'bg-primary text-white shadow-lg shadow-primary/30 scale-105' : 'text-on-surface-variant/60 hover:text-on-surface'}`}
               >
-                Expositor
+                Produtor
               </button>
               <button 
                 onClick={() => { setLoginType('admin'); setLoginError(''); }}
                 className={`px-8 py-3 rounded-[18px] text-[11px] font-black uppercase tracking-[0.1em] transition-all duration-300 ${loginType === 'admin' ? 'bg-primary text-white shadow-lg shadow-primary/30 scale-105' : 'text-on-surface-variant/60 hover:text-on-surface'}`}
               >
-                Gestor
+                Admin
               </button>
             </div>
           </div>
           
           <div className="space-y-2">
             <h2 className="font-display text-3xl font-bold text-on-surface tracking-tight">
-              {loginType === 'admin' ? 'Olá, Gestor' : 'Olá, Expositor'}
+              {loginType === 'admin' ? 'Olá, Admin' : 'Olá, Produtor'}
             </h2>
             <p className="text-on-surface-variant text-sm font-medium opacity-80">
               {loginType === 'admin' ? 'Entre para gerenciar toda a feira.' : 'Entre para gerenciar sua banca e produtos.'}
