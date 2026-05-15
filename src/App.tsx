@@ -208,6 +208,13 @@ function App() {
       setIsScrolled(window.scrollY > 20);
     };
     window.addEventListener('scroll', handleScroll);
+    
+    // Global function to be called from login screen
+    (window as any).showAdminPanel = () => {
+      setShowAdmin(true);
+      setActiveTab('home'); // Reset tab to avoid confusion
+    };
+
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
@@ -251,6 +258,7 @@ function App() {
       case 'list': return t('list.title');
       case 'partners': return t('home.partners_title');
       case 'producers': return t('home.who_makes_title');
+      case 'profile': return 'Painel';
       default: return t('app_name');
     }
   };
@@ -269,6 +277,17 @@ function App() {
         return <Parceiros restaurants={restaurants} appSettings={appSettings} />;
       case 'producers':
         return <Produtores producers={producers} fairSchedules={fairSchedules} />;
+      case 'profile':
+        return (
+          <ProducerPanel 
+            producers={producers} 
+            setProducers={setProducers} 
+            products={products} 
+            setProducts={setProducts} 
+            fairSchedules={fairSchedules}
+            onClose={() => setActiveTab('home')}
+          />
+        );
       case 'list':
         return <Lista items={items} setItems={setItems} savedLists={savedLists} setSavedLists={setSavedLists} />;
       default:

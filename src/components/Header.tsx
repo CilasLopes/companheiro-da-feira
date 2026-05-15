@@ -70,26 +70,6 @@ export const Header = ({
           </div>
         </div>
         <div className="flex items-center gap-1">
-          {onAdminClick && (
-            <button 
-              onClick={onAdminClick}
-              className="p-2.5 rounded-full active:scale-95 transition-all text-on-surface-variant/60"
-              title="Painel Admin"
-            >
-              <SlidersHorizontal size={20} />
-            </button>
-          )}
-
-          {onProducerClick && (
-            <button 
-              onClick={onProducerClick}
-              className="p-2.5 rounded-full active:scale-95 transition-all text-on-surface-variant/60"
-              title="Login"
-            >
-              <User size={20} />
-            </button>
-          )}
-
           {/* Seletor de Idioma */}
           <div className="relative">
             <button 

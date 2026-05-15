@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from 'motion/react';
 import { Clock, Leaf, ShoppingBasket, Coffee, Compass, LeafyGreen, Search, Sprout, MapPin, X, ExternalLink, Users, ArrowRight } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import i18n from 'i18next';
-import { isPriceFilled, getStatus } from '../utils/helpers';
+import { isPriceFilled, getStatus, getNextConfirmedDay } from '../utils/helpers';
 import { Skeleton, BannerSkeleton } from '../components/Skeleton';
 import { RemoteImage } from '../components/RemoteImage';
 
@@ -327,6 +327,14 @@ export const HomeViva = ({ onNavigate, products, fairSchedules, restaurants = []
                   <span className="absolute bottom-4 left-4 bg-white/20 backdrop-blur-md text-white text-[9px] font-black uppercase tracking-widest px-3 py-1 rounded-full border border-white/20">
                     {producer.location}
                   </span>
+                  {producer.confirmed && (
+                    <span className="absolute top-4 right-4 bg-emerald-500 text-white text-[8px] font-black uppercase tracking-widest px-2.5 py-1.5 rounded-lg shadow-lg border border-white/20">
+                      {(() => {
+                        const nextDay = getNextConfirmedDay(producer.confirmedDays);
+                        return nextDay ? `✓ ${t(`home.days.${nextDay}`)}` : '✓ Confirmado';
+                      })()}
+                    </span>
+                  )}
                 </div>
                 <div className="p-5 space-y-2">
                   <h4 className="font-bold text-primary text-xl">{producer.name}</h4>

@@ -27,6 +27,7 @@ const NAV = [
 
 export const ProducerPanel = ({ producers, setProducers, products, setProducts, fairSchedules = [], onClose }: ProducerPanelProps) => {
   const [step, setStep] = useState<'login' | 'dashboard'>('login');
+  const [loginType, setLoginType] = useState<'producer' | 'admin'>('producer');
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [showPw, setShowPw] = useState(false);
@@ -54,6 +55,23 @@ export const ProducerPanel = ({ producers, setProducers, products, setProducts, 
 
   const handleLogin = () => {
     setLoginError('');
+    
+    // LOGIN COMO GESTOR (ADMIN)
+    if (loginType === 'admin') {
+      if (username.trim().toLowerCase() === 'admin' && password.trim() === 'feira123') {
+        if ((window as any).showAdminPanel) {
+          (window as any).showAdminPanel();
+        } else {
+          setLoginError('Erro: Função administrativa não encontrada.');
+        }
+        return;
+      } else {
+        setLoginError('Credenciais de Gestor incorretas.');
+        return;
+      }
+    }
+
+    // LOGIN COMO EXPOSITOR (PRODUTOR)
     const found = producers.find(
       p => p.username && p.password &&
         p.username.trim().toLowerCase() === username.trim().toLowerCase() &&
@@ -64,7 +82,7 @@ export const ProducerPanel = ({ producers, setProducers, products, setProducts, 
       setProfile({ ...found });
       setStep('dashboard');
     } else {
-      setLoginError('Usuário ou senha incorretos. Contate o administrador.');
+      setLoginError('Usuário ou senha de Expositor incorretos.');
     }
   };
 
@@ -124,453 +142,403 @@ export const ProducerPanel = ({ producers, setProducers, products, setProducts, 
 
   const removeProduct = (id: number) => setProducts(products.filter(p => p.id !== id));
 
-  // ─── LOGIN ───────────────────────────────────────────────
+  // ─── LOGIN SCREEN ───────────────────────────────────────────────
   if (step === 'login') return (
     <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
       className="fixed inset-0 z-[200] bg-surface flex flex-col">
-      <div className="flex items-center justify-between px-6 py-4 border-b border-outline-variant/10">
+      
+      {/* Header da Tela de Login */}
+      <div className="flex items-center justify-between px-6 py-5 border-b border-outline-variant/10 bg-white">
         <div className="flex items-center gap-3">
-          <div className="p-2 bg-primary/10 rounded-2xl"><Store size={20} className="text-primary" /></div>
-          <h1 className="font-display text-xl font-bold text-primary">Área do Produtor</h1>
+          <div className="p-2.5 bg-primary/10 rounded-2xl">
+            {loginType === 'admin' ? <Lock size={22} className="text-primary" /> : <Store size={22} className="text-primary" />}
+          </div>
+          <div>
+            <h1 className="font-display text-xl font-bold text-primary leading-none">
+              {loginType === 'admin' ? 'Painel de Gestão' : 'Área do Expositor'}
+            </h1>
+            <p className="text-[10px] text-on-surface-variant font-bold uppercase tracking-wider mt-1 opacity-60">Acesso Privado</p>
+          </div>
         </div>
-        <button onClick={onClose} className="p-2 text-on-surface-variant/60 active:scale-95 transition-transform"><X size={22} /></button>
       </div>
 
-      <div className="flex-1 flex flex-col items-center justify-center px-8 space-y-8">
-        <div className="text-center space-y-3">
-          <div className="w-24 h-24 bg-primary/10 rounded-full flex items-center justify-center mx-auto">
-            <Store size={40} className="text-primary" />
+      <div className="flex-1 flex flex-col items-center justify-center px-8 space-y-10">
+        
+        {/* Seletor de Tipo de Login */}
+        <div className="text-center w-full space-y-6">
+          <div className="flex justify-center">
+            <div className="bg-surface-container-high/50 p-1.5 rounded-[24px] flex gap-1 border border-outline-variant/20 shadow-inner">
+              <button 
+                onClick={() => { setLoginType('producer'); setLoginError(''); }}
+                className={`px-8 py-3 rounded-[18px] text-[11px] font-black uppercase tracking-[0.1em] transition-all duration-300 ${loginType === 'producer' ? 'bg-primary text-white shadow-lg shadow-primary/30 scale-105' : 'text-on-surface-variant/60 hover:text-on-surface'}`}
+              >
+                Expositor
+              </button>
+              <button 
+                onClick={() => { setLoginType('admin'); setLoginError(''); }}
+                className={`px-8 py-3 rounded-[18px] text-[11px] font-black uppercase tracking-[0.1em] transition-all duration-300 ${loginType === 'admin' ? 'bg-primary text-white shadow-lg shadow-primary/30 scale-105' : 'text-on-surface-variant/60 hover:text-on-surface'}`}
+              >
+                Gestor
+              </button>
+            </div>
           </div>
-          <h2 className="font-display text-2xl font-bold text-on-surface">Fazer Login</h2>
-          <p className="text-on-surface-variant text-sm font-medium">Acesso restrito a administradores e produtores.</p>
-          <div className="p-3 bg-primary/5 border border-primary/20 rounded-xl">
-            <p className="text-xs text-primary font-bold">Usuários normais não precisam fazer login.</p>
-            <p className="text-xs text-on-surface-variant mt-1">Basta fechar esta tela e navegar normalmente pelo aplicativo.</p>
+          
+          <div className="space-y-2">
+            <h2 className="font-display text-3xl font-bold text-on-surface tracking-tight">
+              {loginType === 'admin' ? 'Olá, Gestor' : 'Olá, Expositor'}
+            </h2>
+            <p className="text-on-surface-variant text-sm font-medium opacity-80">
+              {loginType === 'admin' ? 'Entre para gerenciar toda a feira.' : 'Entre para gerenciar sua banca e produtos.'}
+            </p>
           </div>
         </div>
 
-        <div className="w-full max-w-sm space-y-3">
-          <input type="text" placeholder="Usuário"
-            value={username} onChange={e => { setUsername(e.target.value); setLoginError(''); }}
-            onKeyDown={e => e.key === 'Enter' && handleLogin()}
-            className="w-full p-4 rounded-2xl bg-surface-container border border-outline-variant/30 text-base outline-none focus:border-primary transition-colors font-medium" />
-
-          <div className="relative">
-            <input type={showPw ? 'text' : 'password'} placeholder="Senha"
-              value={password} onChange={e => { setPassword(e.target.value); setLoginError(''); }}
+        {/* Formulário de Login */}
+        <div className="w-full max-w-sm space-y-4">
+          <div className="space-y-1.5">
+            <p className="text-[10px] font-black uppercase tracking-widest text-on-surface-variant ml-4 mb-1">Usuário</p>
+            <input type="text" placeholder="Digite seu usuário..."
+              value={username} onChange={e => { setUsername(e.target.value); setLoginError(''); }}
               onKeyDown={e => e.key === 'Enter' && handleLogin()}
-              className="w-full p-4 rounded-2xl bg-surface-container border border-outline-variant/30 text-base outline-none focus:border-primary transition-colors pr-14 font-medium" />
-            <button onClick={() => setShowPw(!showPw)}
-              className="absolute right-4 top-1/2 -translate-y-1/2 text-on-surface-variant/50">
-              {showPw ? <EyeOff size={20} /> : <Eye size={20} />}
-            </button>
+              className="w-full p-4 rounded-2xl bg-surface-container border border-outline-variant/30 text-base outline-none focus:border-primary transition-all font-medium shadow-sm" />
           </div>
 
-          {loginError && <p className="text-error text-sm text-center font-medium">{loginError}</p>}
+          <div className="space-y-1.5">
+            <p className="text-[10px] font-black uppercase tracking-widest text-on-surface-variant ml-4 mb-1">Senha</p>
+            <div className="relative">
+              <input type={showPw ? 'text' : 'password'} placeholder="Digite sua senha..."
+                value={password} onChange={e => { setPassword(e.target.value); setLoginError(''); }}
+                onKeyDown={e => e.key === 'Enter' && handleLogin()}
+                className="w-full p-4 rounded-2xl bg-surface-container border border-outline-variant/30 text-base outline-none focus:border-primary transition-all pr-14 font-medium shadow-sm" />
+              <button onClick={() => setShowPw(!showPw)}
+                className="absolute right-4 top-1/2 -translate-y-1/2 text-on-surface-variant/50 hover:text-primary transition-colors">
+                {showPw ? <EyeOff size={22} /> : <Eye size={22} />}
+              </button>
+            </div>
+          </div>
+
+          {loginError && (
+            <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }}
+              className="bg-error/10 border border-error/20 p-3 rounded-xl text-error text-xs text-center font-bold">
+              {loginError}
+            </motion.div>
+          )}
 
           <button onClick={handleLogin}
-            className="w-full py-4 bg-primary text-white rounded-2xl font-bold text-sm uppercase tracking-widest shadow-lg shadow-primary/20 active:scale-95 transition-transform">
-            Entrar
+            className="w-full py-4.5 bg-primary text-white rounded-2xl font-bold text-sm uppercase tracking-[0.2em] shadow-xl shadow-primary/20 active:scale-95 transition-all mt-4">
+            Entrar no Painel
           </button>
         </div>
 
-        <div className="w-full max-w-sm p-4 rounded-2xl bg-primary/5 border border-primary/10 flex gap-3">
-          <Info size={16} className="text-primary mt-0.5 shrink-0" />
-          <p className="text-xs text-on-surface-variant leading-relaxed">
-            As credenciais são definidas pelo administrador da feira. Caso não as saiba, entre em contato.
+        <div className="w-full max-sm p-5 rounded-3xl bg-surface-container-low border border-outline-variant/20 flex gap-4 items-start">
+          <div className="p-2 bg-primary/5 rounded-xl"><Info size={18} className="text-primary shrink-0" /></div>
+          <p className="text-xs text-on-surface-variant/80 leading-relaxed font-medium">
+            O acesso é restrito a parceiros oficiais. Se você esqueceu seus dados, fale com a coordenação da feira.
           </p>
         </div>
       </div>
     </motion.div>
   );
 
-  // ─── DASHBOARD ───────────────────────────────────────────
+  // ─── DASHBOARD SCREEN (PRODUCER ONLY) ───────────────────────────
   return (
     <motion.div initial={{ opacity: 0, x: 40 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: 40 }}
       transition={{ type: 'spring', damping: 28, stiffness: 280 }}
-      className="fixed inset-0 z-[200] bg-surface flex flex-col md:flex-row h-screen">
+      className="fixed inset-0 z-[200] bg-surface flex flex-col md:flex-row h-screen overflow-hidden">
 
       {/* ── SIDEBAR ── */}
-      <div className="w-full md:w-72 bg-surface-container-low border-b md:border-b-0 md:border-r border-outline-variant/20 flex flex-col">
-        {/* Producer identity */}
-        <div className="p-6 flex items-center justify-between">
-          <div className="flex items-center gap-3">
+      <div className="w-full md:w-80 bg-surface-container-low border-b md:border-b-0 md:border-r border-outline-variant/20 flex flex-col shrink-0">
+        <div className="p-8 flex items-center justify-between">
+          <div className="flex items-center gap-4">
             <div className="relative">
               <RemoteImage src={loggedProducer.image || 'https://images.unsplash.com/photo-1595033003999-ed49fe57159c?auto=format&fit=crop&q=80&w=200'}
-                alt={loggedProducer.name} className="w-12 h-12 rounded-2xl object-cover border-2 border-primary/20" />
-              <div className={`absolute -bottom-1 -right-1 w-4 h-4 rounded-full border-2 border-surface ${loggedProducer.confirmed ? 'bg-emerald-500' : 'bg-outline-variant'}`} />
+                alt={loggedProducer.name} className="w-14 h-14 rounded-[22px] object-cover border-2 border-primary/20 shadow-md" />
+              <div className="absolute -bottom-1 -right-1 w-6 h-6 bg-emerald-500 rounded-full border-4 border-surface flex items-center justify-center">
+                <div className="w-1.5 h-1.5 bg-white rounded-full animate-pulse" />
+              </div>
             </div>
             <div>
-              <p className="font-bold text-on-surface text-sm">{loggedProducer.name}</p>
-              <p className="text-xs text-on-surface-variant flex items-center gap-1">
-                <MapPin size={10} /> {loggedProducer.location || 'Localização'}
-              </p>
+              <h2 className="font-display text-lg font-bold text-on-surface leading-tight">{loggedProducer.name}</h2>
+              <div className="flex items-center gap-1.5 mt-0.5">
+                <div className="w-2 h-2 rounded-full bg-emerald-500" />
+                <span className="text-[10px] font-black uppercase tracking-widest text-emerald-600">Online</span>
+              </div>
             </div>
           </div>
-          <div className="flex items-center gap-1">
-            <button onClick={handleLogout} className="p-2 text-on-surface-variant/50 active:scale-95 transition-transform" title="Sair">
-              <LogOut size={18} />
-            </button>
-            <button onClick={onClose} className="p-2 text-on-surface-variant/50 active:scale-95 transition-transform">
-              <X size={18} />
-            </button>
-          </div>
         </div>
 
-        {/* Per-day presence */}
-        <div className="mx-4 mb-4 p-4 rounded-2xl bg-surface border border-outline-variant/20 space-y-3">
-          <p className="text-xs font-black uppercase tracking-widest text-on-surface-variant">Minha Presença</p>
-          {fairSchedules.length === 0 && (
-            <p className="text-xs text-on-surface-variant/60 italic">Nenhum dia de feira cadastrado pelo admin.</p>
-          )}
-          {fairSchedules.map((day: any) => {
-            const confirmed = !!(loggedProducer.confirmedDays?.[day.id]);
+        <nav className="flex-1 px-4 py-2 space-y-1 overflow-y-auto">
+          {NAV.map(item => {
+            const Icon = item.icon;
+            const isActive = activeTab === item.id;
             return (
-              <div key={day.id}
-                className={`flex items-center justify-between p-3 rounded-2xl border-2 cursor-pointer transition-all ${confirmed ? 'bg-emerald-50 border-emerald-400' : 'border-outline-variant/20'}`}
-                onClick={() => toggleDay(day.id)}>
-                <div>
-                  <p className={`text-sm font-bold ${confirmed ? 'text-emerald-700' : 'text-on-surface'}`}>
-                    {t(`home.days.${day.day}`) || day.day || day.name || `Dia ${day.id}`}
-                  </p>
-                  {day.time && <p className="text-[10px] text-on-surface-variant">{day.time}</p>}
-                  {(day.startTime || day.endTime) && (
-                    <p className="text-[10px] text-on-surface-variant">{day.startTime}{day.endTime ? ` – ${day.endTime}` : ''}</p>
-                  )}
-                  {day.location && (
-                    <p className={`text-[10px] font-semibold flex items-center gap-1 mt-0.5 ${confirmed ? 'text-emerald-600' : 'text-on-surface-variant'}`}>
-                      📍 {day.location}
-                    </p>
-                  )}
-                </div>
-                <div className={`relative w-10 h-5 rounded-full transition-all ${confirmed ? 'bg-emerald-500' : 'bg-outline-variant/30'}`}>
-                  <span className={`absolute top-0.5 w-4 h-4 bg-white rounded-full shadow transition-all ${confirmed ? 'right-0.5' : 'left-0.5'}`} />
-                </div>
-              </div>
+              <button key={item.id} onClick={() => setActiveTab(item.id)}
+                className={`w-full flex items-center gap-4 px-5 py-4 rounded-2xl transition-all group ${
+                  isActive ? 'bg-primary text-white shadow-lg shadow-primary/20' : 'text-on-surface-variant hover:bg-surface-container hover:text-on-surface'
+                }`}>
+                <Icon size={20} className={isActive ? 'text-white' : 'group-hover:text-primary transition-colors'} />
+                <span className="font-bold text-sm tracking-tight">{item.label}</span>
+                {isActive && <ChevronRight size={16} className="ml-auto opacity-60" />}
+              </button>
             );
           })}
-        </div>
-
-        {/* Nav items */}
-        <nav className="flex-1 px-4 pb-6 space-y-1 hidden md:block">
-          {NAV.map(item => (
-            <button key={item.id} onClick={() => setActiveTab(item.id)}
-              className={`w-full flex items-center gap-3 px-4 py-3 rounded-2xl transition-all text-left ${activeTab === item.id ? 'bg-primary/10 text-primary' : 'text-on-surface hover:bg-surface-container-high'}`}>
-              <item.icon size={18} />
-              <span className="font-bold text-sm">{item.label}</span>
-              {activeTab !== item.id && <ChevronRight size={14} className="ml-auto opacity-30" />}
-            </button>
-          ))}
         </nav>
 
-        {/* Mobile nav tabs */}
-        <div className="flex md:hidden border-t border-outline-variant/10">
-          {NAV.map(item => (
-            <button key={item.id} onClick={() => setActiveTab(item.id)}
-              className={`flex-1 flex flex-col items-center gap-1 py-3 font-bold transition-all ${activeTab === item.id ? 'text-primary border-t-2 border-primary -mt-px' : 'text-on-surface-variant'}`}>
-              <item.icon size={16} />
-              <span className="text-[9px] uppercase tracking-wider">{item.id === 'overview' ? 'Visão' : item.id === 'profile' ? 'Perfil' : 'Produtos'}</span>
-            </button>
-          ))}
+        <div className="p-6 border-t border-outline-variant/10">
+          <button onClick={handleLogout}
+            className="w-full flex items-center justify-center gap-3 px-5 py-4 rounded-2xl text-error font-bold text-sm hover:bg-error/5 transition-colors border border-transparent hover:border-error/10">
+            <LogOut size={18} />
+            <span>Sair do Painel</span>
+          </button>
         </div>
       </div>
 
-      {/* ── MAIN CONTENT ── */}
-      <div className="flex-1 overflow-y-auto bg-surface">
+      {/* ── CONTENT ── */}
+      <main className="flex-1 overflow-y-auto bg-surface-container-lowest/30 pb-24 md:pb-8">
         <AnimatePresence mode="wait">
+          <motion.div key={activeTab} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }}
+            className="p-6 md:p-10 max-w-5xl mx-auto space-y-8">
 
-          {/* ── VISÃO GERAL ── */}
-          {activeTab === 'overview' && (
-            <motion.div key="overview" initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -16 }}
-              className="p-6 md:p-10 space-y-8">
-              <div>
-                <h2 className="text-2xl font-display font-bold text-on-surface">Olá, {loggedProducer.name.split(' ')[0]}! 👋</h2>
-                <p className="text-on-surface-variant text-sm">Gerencie sua barraca com facilidade.</p>
-              </div>
-
-              {/* Stats */}
-              <div className="grid grid-cols-2 gap-4">
-                <div className="p-5 rounded-3xl bg-amber-50 border border-amber-100 space-y-2">
-                  <div className="w-10 h-10 bg-amber-100 rounded-2xl flex items-center justify-center">
-                    <ShoppingBag size={20} className="text-amber-500" />
-                  </div>
-                  <p className="text-3xl font-display font-bold text-amber-700">{myProducts.length}</p>
-                  <p className="text-xs font-bold text-amber-500 uppercase tracking-widest">Produtos</p>
-                </div>
-                <div className={`p-5 rounded-3xl border space-y-2 ${loggedProducer.confirmed ? 'bg-emerald-50 border-emerald-100' : 'bg-surface-container/40 border-outline-variant/20'}`}>
-                  <div className={`w-10 h-10 rounded-2xl flex items-center justify-center ${loggedProducer.confirmed ? 'bg-emerald-100' : 'bg-surface-container'}`}>
-                    <CalendarCheck size={20} className={loggedProducer.confirmed ? 'text-emerald-500' : 'text-on-surface-variant'} />
-                  </div>
-                  <p className={`text-lg font-display font-bold ${loggedProducer.confirmed ? 'text-emerald-700' : 'text-on-surface-variant'}`}>
-                    {loggedProducer.confirmed ? 'Confirmado' : 'Pendente'}
-                  </p>
-                  <p className={`text-xs font-bold uppercase tracking-widest ${loggedProducer.confirmed ? 'text-emerald-500' : 'text-on-surface-variant'}`}>Esta semana</p>
-                </div>
-              </div>
-
-              {/* Profile preview */}
-              <div className="rounded-3xl overflow-hidden border border-outline-variant/20">
-                {loggedProducer.image && (
-                  <RemoteImage src={loggedProducer.image} alt={loggedProducer.name} className="w-full h-48 object-cover" />
-                )}
-                {!loggedProducer.image && (
-                  <div className="w-full h-48 bg-primary/5 flex flex-col items-center justify-center gap-2 text-primary/40">
-                    <Camera size={32} />
-                    <p className="text-sm font-medium">Adicione uma foto no seu perfil</p>
-                  </div>
-                )}
-                <div className="p-5 space-y-3">
-                  <div>
-                    <h3 className="font-display text-xl font-bold text-on-surface">{loggedProducer.name}</h3>
-                    <p className="text-sm text-on-surface-variant flex items-center gap-1"><MapPin size={12} />{loggedProducer.location || 'Localização não informada'}</p>
-                  </div>
-                  {loggedProducer.history && (
-                    <p className="text-sm text-on-surface leading-relaxed">{loggedProducer.history}</p>
-                  )}
-                  {Array.isArray(loggedProducer.products) && loggedProducer.products.length > 0 && (
-                    <div className="flex flex-wrap gap-2 pt-1">
-                      {loggedProducer.products.map((tag: string) => (
-                        <span key={tag} className="px-3 py-1 bg-secondary/10 text-secondary text-[10px] font-bold uppercase tracking-widest rounded-full">{tag}</span>
-                      ))}
+            {activeTab === 'overview' && (
+              <>
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                  <div className="bg-white p-6 rounded-[32px] border border-outline-variant/20 shadow-sm space-y-4">
+                    <div className="w-12 h-12 bg-primary/10 rounded-2xl flex items-center justify-center text-primary"><ShoppingBag size={24} /></div>
+                    <div>
+                      <p className="text-3xl font-display font-black text-on-surface">{myProducts.length}</p>
+                      <p className="text-xs font-bold text-on-surface-variant uppercase tracking-widest mt-1">Produtos Ativos</p>
                     </div>
-                  )}
+                  </div>
+                  <div className="bg-white p-6 rounded-[32px] border border-outline-variant/20 shadow-sm space-y-4">
+                    <div className="w-12 h-12 bg-emerald-100 rounded-2xl flex items-center justify-center text-emerald-600"><CalendarCheck size={24} /></div>
+                    <div>
+                      <p className="text-3xl font-display font-black text-on-surface">{Object.values(loggedProducer.confirmedDays || {}).filter(Boolean).length}</p>
+                      <p className="text-xs font-bold text-on-surface-variant uppercase tracking-widest mt-1">Presenças Marcadas</p>
+                    </div>
+                  </div>
                 </div>
-              </div>
 
-              <button onClick={() => setActiveTab('profile')}
-                className="w-full py-4 bg-primary text-white rounded-2xl font-bold text-sm uppercase tracking-widest active:scale-95 transition-transform">
-                Editar Perfil
-              </button>
-            </motion.div>
-          )}
+                <section className="bg-white rounded-[32px] border border-outline-variant/20 shadow-sm overflow-hidden">
+                  <div className="p-6 border-b border-outline-variant/10 flex items-center gap-3">
+                    <CalendarCheck className="text-primary" size={20} />
+                    <h3 className="font-display text-lg font-bold">Minha Presença</h3>
+                  </div>
+                  <div className="p-6">
+                    <p className="text-sm text-on-surface-variant mb-6 font-medium leading-relaxed">
+                      Marque abaixo os dias de feira que você estará presente. Isso ajuda seus clientes a se planejarem!
+                    </p>
+                    <div className="flex flex-wrap gap-3">
+                      {fairSchedules.map(s => {
+                        const isConfirmed = loggedProducer.confirmedDays?.[s.id];
+                        return (
+                          <button key={s.id} onClick={() => toggleDay(s.id)}
+                            className={`flex items-center gap-3 px-5 py-3.5 rounded-2xl border-2 transition-all active:scale-95 ${
+                              isConfirmed ? 'bg-emerald-50 text-emerald-700 border-emerald-500 shadow-sm' : 'bg-surface text-on-surface-variant border-outline-variant/20 hover:border-outline-variant hover:bg-surface-container'
+                            }`}>
+                            <div className={`w-6 h-6 rounded-lg flex items-center justify-center transition-colors ${isConfirmed ? 'bg-emerald-500 text-white' : 'bg-outline-variant/20 text-transparent'}`}>
+                              <Check size={14} strokeWidth={4} />
+                            </div>
+                            <div className="text-left">
+                              <p className="text-xs font-black uppercase tracking-widest leading-none mb-1">{s.day}</p>
+                              <p className="text-[10px] font-bold opacity-60 leading-none">{s.location || 'Feira'}</p>
+                            </div>
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </div>
+                </section>
+              </>
+            )}
 
-          {/* ── PERFIL ── */}
-          {activeTab === 'profile' && profile && (
-            <motion.div key="profile" initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -16 }}
-              className="p-6 md:p-10 space-y-6">
-              <div>
-                <h2 className="text-2xl font-display font-bold text-on-surface">Meu Perfil</h2>
-                <p className="text-on-surface-variant text-sm">Informações exibidas para os clientes da feira.</p>
-              </div>
+            {activeTab === 'profile' && (
+              <section className="bg-white rounded-[40px] border border-outline-variant/20 shadow-sm overflow-hidden">
+                <div className="p-8 border-b border-outline-variant/10 bg-surface-container-lowest/50">
+                   <h3 className="font-display text-xl font-bold flex items-center gap-3">
+                    <Edit2 className="text-primary" size={22} />
+                    Editar Perfil da Banca
+                  </h3>
+                </div>
+                <div className="p-8 space-y-8">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div className="space-y-6">
+                      <div className="space-y-1.5">
+                        <label className="text-[11px] font-black uppercase tracking-widest text-on-surface-variant ml-2">Nome da Banca</label>
+                        <input type="text" value={profile.name} onChange={e => setProfile({ ...profile, name: e.target.value })}
+                          className="w-full p-4 rounded-2xl bg-surface-container border border-outline-variant/30 text-sm font-bold outline-none focus:border-primary transition-all" />
+                      </div>
+                      <div className="space-y-1.5">
+                        <label className="text-[11px] font-black uppercase tracking-widest text-on-surface-variant ml-2">História / Bio</label>
+                        <textarea value={profile.history} onChange={e => setProfile({ ...profile, history: e.target.value })}
+                          className="w-full p-4 rounded-2xl bg-surface-container border border-outline-variant/30 text-sm font-medium h-32 resize-none outline-none focus:border-primary transition-all" />
+                      </div>
+                      <div className="space-y-1.5">
+                        <label className="text-[11px] font-black uppercase tracking-widest text-on-surface-variant ml-2">Localização (Origem)</label>
+                        <div className="relative">
+                          <MapPin size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-primary" />
+                          <input type="text" value={profile.location} onChange={e => setProfile({ ...profile, location: e.target.value })}
+                            className="w-full pl-12 pr-4 py-4 rounded-2xl bg-surface-container border border-outline-variant/30 text-sm font-bold outline-none focus:border-primary transition-all" />
+                        </div>
+                      </div>
+                    </div>
 
-              {/* Photo preview + URL */}
-              <div className="space-y-3">
-                <label className="text-xs font-bold text-on-surface-variant uppercase tracking-widest">Foto da Barraca / Produtor</label>
-                {profile.image ? (
-                  <div className="relative rounded-3xl overflow-hidden h-52">
-                    <RemoteImage src={profile.image} alt="preview" className="w-full h-full" />
-                    <button onClick={() => setProfile({ ...profile, image: '' })}
-                      className="absolute top-3 right-3 p-2 bg-black/50 text-white rounded-full">
-                      <X size={16} />
+                    <div className="space-y-6">
+                      <ImageUploadField label="Foto da Banca / Perfil" value={profile.image} onChange={url => setProfile({ ...profile, image: url })} aspect={1} />
+                      
+                      <div className="p-6 rounded-3xl bg-surface-container-low border border-outline-variant/20 space-y-4">
+                        <h4 className="text-xs font-black uppercase tracking-widest text-on-surface-variant flex items-center gap-2">
+                          <Lock size={14} /> Segurança
+                        </h4>
+                        <button onClick={() => setShowChangePw(true)}
+                          className="w-full py-3.5 bg-white text-on-surface border border-outline-variant/40 rounded-xl text-xs font-bold hover:bg-surface transition-colors shadow-sm">
+                          Alterar Senha de Acesso
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="flex justify-end pt-4 border-t border-outline-variant/10">
+                    <button onClick={saveProfile}
+                      className="px-10 py-4 bg-primary text-white rounded-2xl font-bold text-sm uppercase tracking-[0.1em] shadow-xl shadow-primary/20 active:scale-95 transition-all flex items-center gap-2">
+                      {profileSaved ? <Check size={18} strokeWidth={3} /> : <Check size={18} />}
+                      {profileSaved ? 'Perfil Salvo!' : 'Salvar Alterações'}
                     </button>
                   </div>
-                ) : (
-                  <div className="h-52 rounded-3xl bg-primary/5 border-2 border-dashed border-primary/20 flex flex-col items-center justify-center gap-2 text-primary/40">
-                    <Camera size={32} />
-                    <p className="text-sm">Clique no ícone de câmera para enviar</p>
-                  </div>
-                )}
-                <ImageUploadField 
-                  label="Foto da Barraca" 
-                  value={profile.image || ''} 
-                  onChange={url => setProfile({ ...profile, image: url })} 
-                  aspect={1}
-                  targetWidth={800}
-                  targetHeight={800}
-                  category="Perfil"
-                />
-              </div>
-
-              {/* Name */}
-              <div className="space-y-1">
-                <label className="text-xs font-bold text-on-surface-variant uppercase tracking-widest">Nome da Barraca / Produtor</label>
-                <input type="text" placeholder="Ex: Família Silva"
-                  value={profile.name || ''}
-                  onChange={e => setProfile({ ...profile, name: e.target.value })}
-                  className="w-full p-3 rounded-2xl bg-surface-container border border-outline-variant/30 text-sm outline-none focus:border-primary transition-colors font-medium" />
-              </div>
-
-              {/* Location */}
-              <div className="space-y-1">
-                <label className="text-xs font-bold text-on-surface-variant uppercase tracking-widest">Localização / Origem</label>
-                <input type="text" placeholder="Ex: Sítio Novo Horizonte, Jundiaí"
-                  value={profile.location || ''}
-                  onChange={e => setProfile({ ...profile, location: e.target.value })}
-                  className="w-full p-3 rounded-2xl bg-surface-container border border-outline-variant/30 text-sm outline-none focus:border-primary transition-colors" />
-              </div>
-
-              {/* History */}
-              <div className="space-y-1">
-                <label className="text-xs font-bold text-on-surface-variant uppercase tracking-widest">Nossa História</label>
-                <textarea rows={5} placeholder="Conte um pouco sobre sua produção, tradição e missão..."
-                  value={profile.history || ''}
-                  onChange={e => setProfile({ ...profile, history: e.target.value })}
-                  className="w-full p-3 rounded-2xl bg-surface-container border border-outline-variant/30 text-sm outline-none resize-none focus:border-primary transition-colors leading-relaxed" />
-              </div>
-
-              {/* Products tags */}
-              <div className="space-y-1">
-                <label className="text-xs font-bold text-on-surface-variant uppercase tracking-widest">Especialidades (separadas por vírgula)</label>
-                <input type="text"
-                  placeholder="Ex: Hortaliças, Ovos Caipira, Mel"
-                  value={Array.isArray(profile.products) ? profile.products.join(', ') : profile.products || ''}
-                  onChange={e => setProfile({ ...profile, products: e.target.value.split(',').map((s: string) => s.trim()).filter(Boolean) })}
-                  className="w-full p-3 rounded-2xl bg-surface-container border border-outline-variant/30 text-sm outline-none focus:border-primary transition-colors" />
-                {Array.isArray(profile.products) && profile.products.length > 0 && (
-                  <div className="flex flex-wrap gap-2 pt-2">
-                    {profile.products.map((tag: string) => (
-                      <span key={tag} className="px-3 py-1 bg-secondary/10 text-secondary text-[10px] font-bold uppercase tracking-widest rounded-full">{tag}</span>
-                    ))}
-                  </div>
-                )}
-              </div>
-
-              <button onClick={saveProfile}
-                className={`w-full py-4 rounded-2xl font-bold text-sm uppercase tracking-widest active:scale-95 transition-all flex items-center justify-center gap-2 ${profileSaved ? 'bg-emerald-500 text-white' : 'bg-primary text-white shadow-lg shadow-primary/20'}`}>
-                {profileSaved ? <><Check size={16} /> Salvo!</> : 'Salvar Perfil'}
-              </button>
-
-              {/* Change password */}
-              <div className="pt-2 border-t border-outline-variant/20 space-y-3">
-                <button onClick={() => setShowChangePw(!showChangePw)}
-                  className="flex items-center gap-2 text-sm font-bold text-on-surface-variant hover:text-primary transition-colors">
-                  <Lock size={15} />
-                  {showChangePw ? 'Cancelar troca de senha' : 'Trocar minha senha'}
-                </button>
-                <AnimatePresence>
-                  {showChangePw && (
-                    <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} exit={{ opacity: 0, height: 0 }}
-                      className="overflow-hidden">
-                      <div className="p-4 rounded-2xl bg-surface-container space-y-3">
-                        <input type="password" placeholder="Nova senha"
-                          value={newPw} onChange={e => { setNewPw(e.target.value); setPwError(''); }}
-                          className="w-full p-3 rounded-xl bg-surface border border-outline-variant/30 text-sm outline-none focus:border-primary transition-colors" />
-                        <input type="password" placeholder="Confirmar nova senha"
-                          value={confirmPw} onChange={e => { setConfirmPw(e.target.value); setPwError(''); }}
-                          className="w-full p-3 rounded-xl bg-surface border border-outline-variant/30 text-sm outline-none focus:border-primary transition-colors" />
-                        {pwError && <p className="text-error text-xs font-medium">{pwError}</p>}
-                        {pwSaved && <p className="text-emerald-600 text-xs font-bold">✓ Senha alterada com sucesso!</p>}
-                        <button onClick={handleChangePw}
-                          className="w-full py-3 bg-primary text-white rounded-xl font-bold text-xs uppercase tracking-widest active:scale-95 transition-transform">
-                          Confirmar Nova Senha
-                        </button>
-                      </div>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-              </div>
-            </motion.div>
-          )}
-
-          {/* ── PRODUTOS ── */}
-          {activeTab === 'products' && (
-            <motion.div key="products" initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -16 }}
-              className="p-6 md:p-10 space-y-6">
-              <div className="flex items-center justify-between">
-                <div>
-                  <h2 className="text-2xl font-display font-bold text-on-surface">Meus Produtos</h2>
-                  <p className="text-on-surface-variant text-sm">{myProducts.length} produto{myProducts.length !== 1 ? 's' : ''} cadastrado{myProducts.length !== 1 ? 's' : ''}</p>
                 </div>
-                <button onClick={() => {
-                    if (addingProduct) {
-                      setAddingProduct(false);
-                      setEditingProductId(null);
-                      setNewProduct({ name: '', type: '', price: '', img: '' });
-                    } else {
-                      setAddingProduct(true);
-                    }
-                  }}
-                  className={`flex items-center gap-2 px-4 py-2.5 rounded-2xl font-bold text-sm active:scale-95 transition-transform ${addingProduct ? 'bg-surface-container text-on-surface-variant' : 'bg-primary text-white'}`}>
-                  <Plus size={16} /> {addingProduct ? 'Cancelar' : 'Novo'}
-                </button>
-              </div>
+              </section>
+            )}
 
-              {/* Add product form */}
-              <AnimatePresence>
-                {addingProduct && (
-                  <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} exit={{ opacity: 0, height: 0 }}
-                    className="overflow-hidden">
-                    <div className="p-5 rounded-3xl bg-amber-50 border border-amber-100 space-y-3">
-                      <h3 className="font-bold text-amber-700 text-sm">{editingProductId ? 'Editar Produto' : 'Adicionar Produto'}</h3>
-                      <input type="text" placeholder="Nome do produto *"
-                        value={newProduct.name} onChange={e => setNewProduct({ ...newProduct, name: e.target.value })}
-                        className="w-full p-3 rounded-xl bg-surface border border-outline-variant/30 text-sm outline-none focus:border-amber-400 transition-colors" />
-                      <div className="grid grid-cols-2 gap-2">
-                        <input type="text" placeholder="Categoria"
-                          value={newProduct.type} onChange={e => setNewProduct({ ...newProduct, type: e.target.value })}
-                          className="w-full p-3 rounded-xl bg-surface border border-outline-variant/30 text-sm outline-none focus:border-amber-400 transition-colors" />
-                        <input type="text" placeholder="Preço (R$ 5,00)"
-                          value={newProduct.price} onChange={e => setNewProduct({ ...newProduct, price: e.target.value })}
-                          className="w-full p-3 rounded-xl bg-surface border border-outline-variant/30 text-sm outline-none focus:border-amber-400 transition-colors" />
-                      </div>
-                      <ImageUploadField 
-                        label="Foto do Produto" 
-                        value={newProduct.img} 
-                        onChange={url => setNewProduct({ ...newProduct, img: url })} 
-                        aspect={1}
-                        targetWidth={800}
-                        targetHeight={800}
-                        category="Produtos"
-                      />
-                      <button onClick={saveProduct}
-                        className="w-full py-3 bg-amber-500 text-white rounded-xl font-bold text-sm active:scale-95 transition-transform flex items-center justify-center gap-2">
-                        <Check size={16} /> Confirmar
-                      </button>
-                    </div>
-                  </motion.div>
-                )}
-              </AnimatePresence>
-
-              {/* Products list */}
-              {myProducts.length === 0 && !addingProduct && (
-                <div className="py-16 text-center space-y-3">
-                  <ShoppingBag size={48} className="mx-auto text-outline-variant opacity-30" />
-                  <p className="text-on-surface-variant font-medium">Nenhum produto ainda</p>
-                  <p className="text-sm text-on-surface-variant/60">Clique em "Novo" para adicionar seu primeiro produto.</p>
+            {activeTab === 'products' && (
+              <div className="space-y-6">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <h3 className="font-display text-2xl font-bold text-on-surface">Meus Produtos</h3>
+                    <p className="text-sm text-on-surface-variant font-medium mt-1">Gerencie o catálogo da sua banca</p>
+                  </div>
+                  <button onClick={() => { setAddingProduct(true); setEditingProductId(null); setNewProduct({ name: '', type: '', price: '', img: '' }); }}
+                    className="flex items-center gap-2 bg-primary text-white px-6 py-3.5 rounded-2xl font-bold text-sm shadow-lg shadow-primary/20 active:scale-95 transition-all">
+                    <Plus size={20} />
+                    <span>Novo Produto</span>
+                  </button>
                 </div>
-              )}
 
-              <div className="space-y-3">
-                <AnimatePresence>
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                   {myProducts.map(p => (
-                    <motion.div key={p.id}
-                      initial={{ opacity: 0, scale: 0.97 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.95 }}
-                      className="flex items-center gap-4 p-4 rounded-3xl bg-surface-container/40 border border-outline-variant/20">
-                      {p.img ? (
-                        <RemoteImage src={p.img} alt={p.name} className="w-16 h-16 rounded-2xl shrink-0" />
-                      ) : (
-                        <div className="w-16 h-16 rounded-2xl bg-amber-100 flex items-center justify-center shrink-0">
-                          <ShoppingBag size={24} className="text-amber-400" />
+                    <motion.div key={p.id} layout className="bg-white rounded-[32px] border border-outline-variant/20 shadow-sm overflow-hidden group">
+                      <div className="relative h-44">
+                        <RemoteImage src={p.img} alt={p.name} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
+                        <div className="absolute top-3 right-3 flex gap-2">
+                          <button onClick={() => { setAddingProduct(true); setEditingProductId(p.id); setNewProduct(p); }}
+                            className="p-2.5 bg-white/90 backdrop-blur-md rounded-xl text-primary shadow-lg active:scale-90 transition-transform">
+                            <Edit2 size={16} />
+                          </button>
+                          <button onClick={() => removeProduct(p.id)}
+                            className="p-2.5 bg-white/90 backdrop-blur-md rounded-xl text-error shadow-lg active:scale-90 transition-transform">
+                            <Trash2 size={16} />
+                          </button>
                         </div>
-                      )}
-                      <div className="flex-1 min-w-0">
-                        <p className="font-bold text-on-surface truncate">{p.name}</p>
-                        <p className="text-sm text-on-surface-variant">{p.type}</p>
-                        <p className="text-sm font-bold text-primary">{p.price}</p>
+                        <div className="absolute bottom-3 left-3 px-3 py-1 bg-white/90 backdrop-blur-md rounded-lg text-[10px] font-black uppercase tracking-widest text-primary shadow-sm">
+                          {p.type}
+                        </div>
                       </div>
-                      <div className="flex gap-1 shrink-0">
-                        <button onClick={() => {
-                            setEditingProductId(p.id);
-                            setNewProduct({ name: p.name || '', type: p.type || p.cat || '', price: p.price || '', img: p.img || p.image || '' });
-                            setAddingProduct(true);
-                          }}
-                          className="p-2.5 text-primary/60 active:text-primary active:scale-95 transition-all">
-                          <Edit2 size={18} />
-                        </button>
-                        <button onClick={() => removeProduct(p.id)}
-                          className="p-2.5 text-error/40 active:text-error active:scale-95 transition-all">
-                          <Trash2 size={18} />
-                        </button>
+                      <div className="p-5 space-y-1">
+                        <h4 className="font-bold text-on-surface leading-tight">{p.name}</h4>
+                        <p className="text-primary font-black text-sm">{p.price || 'Preço sob consulta'}</p>
                       </div>
                     </motion.div>
                   ))}
-                </AnimatePresence>
+                </div>
+              </div>
+            )}
+
+          </motion.div>
+        </AnimatePresence>
+      </main>
+
+      {/* Modal Adicionar/Editar Produto */}
+      <AnimatePresence>
+        {addingProduct && (
+          <div className="fixed inset-0 z-[300] bg-black/60 backdrop-blur-sm flex items-center justify-center p-6">
+            <motion.div initial={{ opacity: 0, scale: 0.95, y: 20 }} animate={{ opacity: 1, scale: 1, y: 0 }} exit={{ opacity: 0, scale: 0.95, y: 20 }}
+              className="bg-white w-full max-w-xl rounded-[40px] p-8 shadow-2xl relative max-h-[90vh] overflow-y-auto">
+              <button onClick={() => setAddingProduct(false)} className="absolute top-6 right-6 p-2 bg-surface-container rounded-full"><X size={20} /></button>
+              <h3 className="font-display text-2xl font-bold mb-8 flex items-center gap-3">
+                <ShoppingBag className="text-primary" size={26} />
+                {editingProductId ? 'Editar Produto' : 'Novo Produto'}
+              </h3>
+              <div className="space-y-6">
+                <div className="space-y-1.5">
+                  <label className="text-[11px] font-black uppercase tracking-widest text-on-surface-variant ml-2">Nome do Produto</label>
+                  <input type="text" value={newProduct.name} onChange={e => setNewProduct({ ...newProduct, name: e.target.value })}
+                    placeholder="Ex: Alface Crespa Orgânica" className="w-full p-4 rounded-2xl bg-surface-container border border-outline-variant/30 text-sm font-bold" />
+                </div>
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="space-y-1.5">
+                    <label className="text-[11px] font-black uppercase tracking-widest text-on-surface-variant ml-2">Categoria</label>
+                    <input type="text" value={newProduct.type} onChange={e => setNewProduct({ ...newProduct, type: e.target.value })}
+                      placeholder="Ex: Verduras" className="w-full p-4 rounded-2xl bg-surface-container border border-outline-variant/30 text-sm font-bold" />
+                  </div>
+                  <div className="space-y-1.5">
+                    <label className="text-[11px] font-black uppercase tracking-widest text-on-surface-variant ml-2">Preço / Unidade</label>
+                    <input type="text" value={newProduct.price} onChange={e => setNewProduct({ ...newProduct, price: e.target.value })}
+                      placeholder="Ex: R$ 5,00 / un" className="w-full p-4 rounded-2xl bg-surface-container border border-outline-variant/30 text-sm font-bold" />
+                  </div>
+                </div>
+                <ImageUploadField label="Foto do Produto" value={newProduct.img} onChange={url => setNewProduct({ ...newProduct, img: url })} aspect={4/3} />
+                <button onClick={saveProduct}
+                  className="w-full py-5 bg-primary text-white rounded-2xl font-bold text-sm uppercase tracking-widest shadow-xl shadow-primary/20 active:scale-95 transition-all mt-4">
+                  {editingProductId ? 'Atualizar Produto' : 'Adicionar ao Catálogo'}
+                </button>
               </div>
             </motion.div>
-          )}
+          </div>
+        )}
+      </AnimatePresence>
 
-        </AnimatePresence>
-      </div>
+      {/* Modal Alterar Senha */}
+      <AnimatePresence>
+        {showChangePw && (
+          <div className="fixed inset-0 z-[400] bg-black/60 backdrop-blur-sm flex items-center justify-center p-6">
+            <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.95 }}
+              className="bg-white w-full max-w-md rounded-[32px] p-8 shadow-2xl relative">
+              <button onClick={() => setShowChangePw(false)} className="absolute top-6 right-6 p-2 bg-surface-container rounded-full"><X size={20} /></button>
+              <h3 className="font-display text-xl font-bold mb-6 flex items-center gap-3">
+                <Lock className="text-primary" size={24} />
+                Alterar Senha
+              </h3>
+              <div className="space-y-4">
+                <div className="space-y-1.5">
+                  <label className="text-[11px] font-black uppercase tracking-widest text-on-surface-variant ml-2">Nova Senha</label>
+                  <input type="password" value={newPw} onChange={e => setNewPw(e.target.value)}
+                    className="w-full p-4 rounded-2xl bg-surface-container border border-outline-variant/30 text-sm font-bold" />
+                </div>
+                <div className="space-y-1.5">
+                  <label className="text-[11px] font-black uppercase tracking-widest text-on-surface-variant ml-2">Confirmar Senha</label>
+                  <input type="password" value={confirmPw} onChange={e => setConfirmPw(e.target.value)}
+                    className="w-full p-4 rounded-2xl bg-surface-container border border-outline-variant/30 text-sm font-bold" />
+                </div>
+                {pwError && <p className="text-error text-xs font-bold text-center">{pwError}</p>}
+                <button onClick={handleChangePw}
+                  className="w-full py-4 bg-primary text-white rounded-2xl font-bold text-sm uppercase tracking-widest shadow-xl shadow-primary/20 transition-all mt-4">
+                  Confirmar Nova Senha
+                </button>
+              </div>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
+
+      {/* Alerta de Sucesso (Password) */}
+      <AnimatePresence>
+        {pwSaved && (
+          <motion.div initial={{ opacity: 0, y: 50 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 50 }}
+            className="fixed bottom-10 left-1/2 -translate-x-1/2 z-[500] bg-emerald-500 text-white px-8 py-4 rounded-full font-bold shadow-2xl flex items-center gap-3">
+            <Check size={20} strokeWidth={4} />
+            Senha alterada com sucesso!
+          </motion.div>
+        )}
+      </AnimatePresence>
+
     </motion.div>
   );
 };

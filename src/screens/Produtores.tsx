@@ -3,7 +3,7 @@ import { RemoteImage } from '../components/RemoteImage';
 const MotionRemoteImage = motion.create(RemoteImage);
 import { Map as MapIcon } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
-import { isPriceFilled } from '../utils/helpers';
+import { isPriceFilled, getNextConfirmedDay } from '../utils/helpers';
 
 
 export const Produtores = ({ producers, fairSchedules = [] }: { producers: any[], fairSchedules?: any[] }) => {
@@ -29,50 +29,16 @@ export const Produtores = ({ producers, fairSchedules = [] }: { producers: any[]
                 whileInView={{ opacity: 1, x: 0 }}
                 className="flex flex-wrap gap-2"
               >
-                {producer.confirmed && (() => {
-                  const confirmedDays: Record<string, boolean> = producer.confirmedDays || {};
-                  const confirmedSchedules = fairSchedules.filter((s: any) => confirmedDays[s.id]);
-
-                  if (confirmedSchedules.length > 0) {
-                    const now = new Date();
-                    const currentDayNum = now.getDay();
-                    const daysMap: { [key: string]: number } = {
-                      'Domingo': 0, 'Segunda-feira': 1, 'Terça-feira': 2, 'Quarta-feira': 3, 'Quinta-feira': 4, 'Sexta-feira': 5, 'Sábado': 6,
-                    };
-
-                    const sortedSchedules = [...confirmedSchedules].sort((a: any, b: any) => {
-                      const dayA = daysMap[a.day] ?? 0;
-                      const dayB = daysMap[b.day] ?? 0;
-                      const diffA = (dayA - currentDayNum + 7) % 7;
-                      const diffB = (dayB - currentDayNum + 7) % 7;
-
-                      if (diffA !== diffB) return diffA - diffB;
-                      return a.startTime.localeCompare(b.startTime);
-                    });
-
-                    // Pega a feira de hoje ou a próxima mais próxima
-                    const s = sortedSchedules[0]; 
-                    return (
-                      <div key={s.id} className="flex flex-col bg-primary text-white px-4 py-2 rounded-xl shadow-md shadow-black/30 border border-white/20">
-                        <span className="text-[11px] font-black uppercase tracking-wider flex items-center gap-1">
-                          <span>✓</span> Presente · {s.day}
-                        </span>
-                        {s.location && (
-                          <span className="text-[11px] font-semibold mt-0.5 opacity-90">
-                            📍 {s.location}
-                          </span>
-                        )}
-                      </div>
-                    );
-                  }
-                  return (
-                    <div className="flex flex-col bg-primary text-white px-4 py-2 rounded-xl shadow-md shadow-black/30 border border-white/20">
-                      <span className="text-[11px] font-black uppercase tracking-wider flex items-center gap-1">
-                        <span>✓</span> Confirmado esta semana
-                      </span>
-                    </div>
-                  );
-                })()}
+                {producer.confirmed && (
+                  <div className="flex flex-col bg-emerald-500 text-white px-4 py-2 rounded-xl shadow-lg shadow-emerald-200 border border-white/20">
+                    <span className="text-[11px] font-black uppercase tracking-wider flex items-center gap-1">
+                      <span>✓</span> {(() => {
+                        const nextDay = getNextConfirmedDay(producer.confirmedDays, fairSchedules);
+                        return nextDay ? `Confirmado: ${t(`home.days.${nextDay}`)}` : 'Confirmado esta semana';
+                      })()}
+                    </span>
+                  </div>
+                )}
               </motion.div>
               <motion.h2 
                 initial={{ opacity: 0, y: 20 }}

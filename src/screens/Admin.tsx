@@ -574,17 +574,72 @@ export const Admin = ({
                     <input type="password" placeholder="Senha" value={newProducer.password} onChange={e => setNewProducer({...newProducer, password: e.target.value})} className="w-full p-2.5 rounded-lg bg-surface-container border border-outline-variant/30 text-sm outline-none" />
                   </div>
                 </div>
-                <div className="flex items-center justify-between p-3 rounded-xl bg-surface border border-outline-variant/30">
+                <div className="p-4 rounded-xl bg-surface border border-outline-variant/30 space-y-3">
                   <div>
-                    <p className="text-sm font-bold text-on-surface">Confirmado esta semana</p>
-                    <p className="text-xs text-on-surface-variant">Aparecerá com badge verde na tela pública</p>
+                    <p className="text-sm font-bold text-on-surface">Presença Confirmada</p>
+                    <p className="text-xs text-on-surface-variant">Selecione o próximo dia de feira que o produtor estará presente</p>
                   </div>
-                  <button
-                    onClick={() => setNewProducer({...newProducer, confirmed: !newProducer.confirmed})}
-                    className={`relative w-12 h-6 rounded-full transition-all duration-300 ${newProducer.confirmed ? 'bg-emerald-500' : 'bg-outline-variant/40'}`}
-                  >
-                    <span className={`absolute top-0.5 w-5 h-5 bg-white rounded-full shadow transition-all duration-300 ${newProducer.confirmed ? 'right-0.5' : 'left-0.5'}`} />
-                  </button>
+                  <div className="flex flex-wrap gap-2">
+                    {fairSchedules && fairSchedules.length > 0 ? (
+                      fairSchedules.map((schedule: any) => {
+                        const confirmedDays = newProducer.confirmedDays || {};
+                        const isSelected = !!confirmedDays[schedule.id];
+                        return (
+                          <button
+                            key={schedule.id}
+                            onClick={() => {
+                              const nextDays = { ...confirmedDays, [schedule.id]: !isSelected };
+                              const hasAny = Object.values(nextDays).some(Boolean);
+                              setNewProducer({
+                                ...newProducer, 
+                                confirmedDays: nextDays,
+                                confirmed: hasAny
+                              });
+                            }}
+                            className={`px-3 py-2 rounded-lg text-[10px] font-black uppercase tracking-widest transition-all ${
+                              isSelected 
+                                ? 'bg-emerald-500 text-white shadow-lg shadow-emerald-200' 
+                                : 'bg-surface-container text-on-surface-variant hover:bg-outline-variant/20'
+                            }`}
+                          >
+                            {schedule.day.substring(0, 3)} - {schedule.location || 'Feira'}
+                          </button>
+                        );
+                      })
+                    ) : (
+                      DAYS_OF_WEEK.map((day) => {
+                        const confirmedDays = Array.isArray(newProducer.confirmedDays) ? newProducer.confirmedDays : [];
+                        const isSelected = confirmedDays.includes(day);
+                        return (
+                          <button
+                            key={day}
+                            onClick={() => {
+                              const nextDays = isSelected 
+                                ? confirmedDays.filter(d => d !== day)
+                                : [...confirmedDays, day];
+                              setNewProducer({
+                                ...newProducer, 
+                                confirmedDays: nextDays,
+                                confirmed: nextDays.length > 0
+                              });
+                            }}
+                            className={`px-3 py-2 rounded-lg text-[10px] font-black uppercase tracking-widest transition-all ${
+                              isSelected 
+                                ? 'bg-emerald-500 text-white shadow-lg shadow-emerald-200' 
+                                : 'bg-surface-container text-on-surface-variant hover:bg-outline-variant/20'
+                            }`}
+                          >
+                            {t(`home.days.${day}`).substring(0, 3)}
+                          </button>
+                        );
+                      })
+                    )}
+                  </div>
+                  {newProducer.confirmed && (
+                    <p className="text-[10px] text-emerald-600 font-bold italic">
+                      ✓ Produtor confirmado para as feiras selecionadas
+                    </p>
+                  )}
                 </div>
                 <button onClick={saveProducer} className="w-full py-4 bg-primary text-white rounded-xl font-bold uppercase tracking-widest text-xs shadow-lg">SALVAR</button>
               </div>
@@ -1748,6 +1803,65 @@ const ProducerItem = ({ p, editingProducer, setEditingProducer, saveProducer, de
             targetWidth={800}
             targetHeight={800}
           />
+          <div className="p-3 rounded-xl bg-surface border border-outline-variant/30 space-y-2">
+            <p className="text-[10px] font-black uppercase tracking-widest text-on-surface-variant pl-1">Presença</p>
+            <div className="flex flex-wrap gap-1.5">
+              {fairSchedules && fairSchedules.length > 0 ? (
+                fairSchedules.map((schedule: any) => {
+                  const confirmedDays = editingProducer.confirmedDays || {};
+                  const isSelected = !!confirmedDays[schedule.id];
+                  return (
+                    <button
+                      key={schedule.id}
+                      onClick={() => {
+                        const nextDays = { ...confirmedDays, [schedule.id]: !isSelected };
+                        const hasAny = Object.values(nextDays).some(Boolean);
+                        setEditingProducer({
+                          ...editingProducer, 
+                          confirmedDays: nextDays,
+                          confirmed: hasAny
+                        });
+                      }}
+                      className={`px-2.5 py-1.5 rounded-lg text-[9px] font-black uppercase tracking-widest transition-all ${
+                        isSelected 
+                          ? 'bg-emerald-500 text-white' 
+                          : 'bg-surface-container text-on-surface-variant'
+                      }`}
+                    >
+                      {schedule.day.substring(0, 3)}
+                    </button>
+                  );
+                })
+              ) : (
+                ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'].map((day) => {
+                  const confirmedDays = Array.isArray(editingProducer.confirmedDays) ? editingProducer.confirmedDays : [];
+                  const isSelected = confirmedDays.includes(day);
+                  return (
+                    <button
+                      key={day}
+                      onClick={() => {
+                        const nextDays = isSelected 
+                          ? confirmedDays.filter(d => d !== day)
+                          : [...confirmedDays, day];
+                        setEditingProducer({
+                          ...editingProducer, 
+                          confirmedDays: nextDays,
+                          confirmed: nextDays.length > 0
+                        });
+                      }}
+                      className={`px-2.5 py-1.5 rounded-lg text-[9px] font-black uppercase tracking-widest transition-all ${
+                        isSelected 
+                          ? 'bg-emerald-500 text-white' 
+                          : 'bg-surface-container text-on-surface-variant'
+                      }`}
+                    >
+                      {t(`home.days.${day}`).substring(0, 3)}
+                    </button>
+                  );
+                })
+              )}
+            </div>
+          </div>
           <div className="flex gap-2">
             <button onClick={saveProducer} className="flex-1 py-2 bg-primary text-white rounded-lg text-xs font-bold">Salvar</button>
             <button onClick={() => setEditingProducer(null)} className="flex-1 py-2 bg-outline-variant text-white rounded-lg text-xs font-bold">Cancelar</button>
