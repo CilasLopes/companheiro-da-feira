@@ -1,0 +1,9 @@
+{
+  "name": "Remix: Companheiro da Feira",
+  "description": "Seu guia essencial para a feira orgânica: trilhas, produtores locais e lista de compras inteligente.",
+  "requestFramePermissions": [
+    "geolocation",
+    "camera"
+  ],
+  "majorCapabilities": []
+}

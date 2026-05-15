@@ -1,0 +1,276 @@
+{
+  "app_name": "Fair Companion",
+  "header": {
+    "notifications_title": "Notifications",
+    "notifications_clear_all": "Clear All",
+    "notifications_empty": "No notifications at the moment",
+    "notif_urgent": "Urgent",
+    "notif_event": "Event",
+    "notif_info": "Info"
+  },
+  "footer": {
+    "home": "Home",
+    "market": "Market",
+    "map": "Explore",
+    "list": "List"
+  },
+  "market": {
+    "title": "MARKET",
+    "subtitle": "BUILD YOUR SHOPPING LIST",
+    "search": "What are you looking for?",
+    "add_to_list": "Add to list"
+  },
+  "list": {
+    "title": "My List",
+    "status": "{{count}} of {{total}} completed",
+    "empty": "Your list is empty.",
+    "saved": "Saved",
+    "save": "Save",
+    "clear": "Clear",
+    "share": "Share",
+    "clear_all": "Clear All",
+    "new": "New"
+  },
+  "mercado": {
+    "search_placeholder": "Search products...",
+    "title": "Market",
+    "subtitle": "Build your shopping list",
+    "cancel": "Cancel",
+    "see_more": "See more",
+    "results_for": "Results for \"{{query}}\"",
+    "type_to_search": "Type what you're looking for",
+    "no_products": "No products found...",
+    "your_list": "Your List",
+    "items_selected": "{{count}} items selected",
+    "view_list": "View List",
+    "info_card_title": "Build your market list!",
+    "info_card_desc": "This is a place for you to explore products and organize your shopping. We don't sell online — the market is the place to meet!",
+    "categories": {
+      "highlights": "Highlights",
+      "organics": "Organics",
+      "greens": "Greens",
+      "vegetables": "Vegetables",
+      "fruits": "Fruits",
+      "spices": "Spices"
+    }
+  },
+  "home": {
+    "happening_now": "Happening Now",
+    "next_fair": "Next Fair",
+    "no_fair_scheduled": "No fair scheduled for the next few days.",
+    "plan_title": "What's your plan?",
+    "market_tab": "Market",
+    "market_title": "Shop Fresh",
+    "cafe_tab": "Break",
+    "cafe_title": "Coffee in the Park",
+    "explore_tab": "Explore",
+    "explore_title": "Discover Places",
+    "plan_tab": "Plan",
+    "plan_title_card": "My List",
+    "origin_tab": "Origin & History",
+    "origin_title": "Meet those who plant what you eat",
+    "who_makes_title": "Who makes your market",
+    "see_stories": "See Stories",
+    "partners_title": "Partner Restaurants",
+    "see_all": "See All",
+    "address": "Address",
+    "opening_hours": "Opening Hours",
+    "about": "About",
+    "google_maps": "View on Google Maps",
+    "schedule_format": "{{day}}, from {{start}} to {{end}}",
+    "days": {
+      "Sunday": "Sunday",
+      "Monday": "Monday",
+      "Tuesday": "Tuesday",
+      "Wednesday": "Wednesday",
+      "Thursday": "Thursday",
+      "Friday": "Friday",
+      "Saturday": "Saturday"
+    }
+  },
+  "explore": {
+    "guide_title": "Fair Guide",
+    "guide_subtitle": "Your companion to discover the best of the month.",
+    "season_title": "Season Highlights",
+    "agenda_title": "Schedule",
+    "agenda_fair_days": "Fair Days and Location",
+    "agenda_special_events": "Special Events",
+    "cooking_title": "Cooking with the Fair",
+    "cooking_subtitle": "ARTISANAL & HEALTHY",
+    "intro": "Introduction",
+    "ingredients": "Ingredients",
+    "no_ingredients": "No ingredients listed.",
+    "instructions": "Instructions",
+    "no_instructions": "No instructions listed.",
+    "time_range": "{{start}} to {{end}}"
+  },
+  "partners": {
+    "title": "Local Partners",
+    "subtitle": "Restaurants and initiatives that support local production.",
+    "view_map": "View on Map",
+    "be_partner_title": "Want to be a partner?",
+    "be_partner_subtitle": "Join our network of establishments that value fresh and sustainable food.",
+    "learn_more": "Learn More"
+  },
+  "producers": {
+    "local_producer": "Local Producer",
+    "our_story": "Our Story",
+    "no_producers": "No producers registered at the moment."
+  },
+  "admin": {
+    "title": "Admin Panel",
+    "back": "Back to App",
+    "sections": {
+      "hero": "Banner",
+      "fair": "Schedule",
+      "events": "Events",
+      "producers": "Producers",
+      "products": "Market",
+      "recipes": "Recipes",
+      "restaurants": "Partners",
+      "cafe": "Cafe",
+      "seasonal": "Seasonal",
+      "notifications": "Alerts",
+      "settings": "Settings"
+    },
+    "save": "Save",
+    "delete": "Delete",
+    "edit": "Edit",
+    "cancel": "Cancel",
+    "hero": {
+      "add_title": "Add New Slide",
+      "title_placeholder": "Main title",
+      "subtitle_placeholder": "Subtitle or Category",
+      "image_placeholder": "Background Image URL",
+      "active_list": "Active Banner Slides"
+    },
+    "products": {
+      "add_title": "Add Product",
+      "name_placeholder": "Name (e.g., Tomato)",
+      "type_placeholder": "Type/Unit (e.g., kg, unit)",
+      "price_placeholder": "Price (e.g., $ 5.00)",
+      "image_placeholder": "Image URL (optional)",
+      "active_list": "Registered Products"
+    },
+    "recipes": {
+      "add_title": "Add Recipe",
+      "title_placeholder": "Recipe Name",
+      "intro_placeholder": "Short description",
+      "ingredients_placeholder": "Ingredients (one per line)",
+      "instructions_placeholder": "Preparation steps",
+      "image_placeholder": "Recipe Image URL",
+      "time_placeholder": "Time (e.g., 30 min)",
+      "diff_placeholder": "Difficulty (Easy, Medium)",
+      "active_list": "Registered Recipes"
+    },
+    "producers": {
+      "add_title": "Add Local Producer",
+      "name_placeholder": "Producer Name",
+      "history_placeholder": "Producer's story and methods",
+      "location_placeholder": "Location/Farm",
+      "products_placeholder": "Products (comma separated)",
+      "image_placeholder": "Producer Image URL",
+      "active_list": "Registered Producers"
+    },
+    "events": {
+      "add_title": "Add Special Event",
+      "title_placeholder": "Event Name",
+      "desc_placeholder": "Short description of the event",
+      "date_label": "Date",
+      "time_label": "Time",
+      "location_placeholder": "Location",
+      "active_list": "Registered Events"
+    },
+    "restaurants": {
+      "add_title": "Add Partner/Restaurant",
+      "name_placeholder": "Name",
+      "type_placeholder": "Type (e.g., Vegan, Vegetarian)",
+      "address_placeholder": "Address (e.g., Main St.)",
+      "open_label": "Opens at",
+      "close_label": "Closes at",
+      "desc_placeholder": "Description about the restaurant (optional)",
+      "image_placeholder": "Image URL (optional)",
+      "active_list": "Registered Partners"
+    },
+    "cafe": {
+      "add_title": "Add Cafe Item",
+      "name_placeholder": "Name",
+      "category_placeholder": "Category",
+      "price_placeholder": "Price (e.g., $ 4.00)",
+      "desc_placeholder": "Quick description",
+      "ingredients_placeholder": "Ingredients",
+      "image_placeholder": "Image URL (optional)",
+      "active_list": "Cafe Menu"
+    },
+    "seasonal": {
+      "add_title": "Add Seasonal Highlight",
+      "name_placeholder": "Name (e.g., Strawberry)",
+      "benefit_placeholder": "Benefit (e.g., Vitamin C)",
+      "image_placeholder": "Image URL",
+      "active_list": "Seasonal Items"
+    },
+    "fair": {
+      "add_title": "Add Fair Day",
+      "day_label": "Day of the Week",
+      "select_day": "Select Day...",
+      "start_label": "Start",
+      "end_label": "End",
+      "location_label": "Location",
+      "location_placeholder": "e.g., City Park",
+      "accessibility_label": "Accessibility (Optional)",
+      "accessibility_placeholder": "e.g., Access ramp",
+      "save_btn": "Save Fair Day",
+      "active_list": "Current Schedule"
+    },
+    "notifications": {
+      "add_title": "Send Notification / Alert",
+      "title_label": "Alert Title",
+      "title_placeholder": "e.g., Location Change",
+      "msg_label": "Message",
+      "msg_placeholder": "Describe the event or change...",
+      "type_label": "Alert Type",
+      "types": {
+        "info": "Informative",
+        "warning": "Urgent",
+        "event": "Event",
+        "success": "Success"
+      },
+      "send_btn": "Send Notification",
+      "history_title": "Send History",
+      "empty_history": "No notifications sent yet."
+    },
+    "settings": {
+      "title": "Settings and Language",
+      "language_label": "System Language",
+      "about_description": "The app automatically detects your system language. Use the options above to force a specific language. Translations cover section names, buttons, and system messages."
+    }
+  },
+  "months": {
+    "JANEIRO": "JAN",
+    "FEVEREIRO": "FEB",
+    "MARÇO": "MAR",
+    "ABRIL": "APR",
+    "MAIO": "MAY",
+    "JUNHO": "JUN",
+    "JULHO": "JUL",
+    "AGOSTO": "AUG",
+    "SETEMBRO": "SEP",
+    "OUTUBRO": "OCT",
+    "NOVEMBRO": "NOV",
+    "DEZEMBRO": "DEC",
+    "JAN": "JAN",
+    "FEV": "FEB",
+    "MAR": "MAR",
+    "ABR": "APR",
+    "MAI": "MAY",
+    "JUN": "JUN",
+    "JUL": "JUL",
+    "AGO": "AUG",
+    "SET": "SEP",
+    "OUT": "OCT",
+    "NOV": "NOV",
+    "DEZ": "DEC"
+  },
+  "Degustação": "Tasting",
+  "de queijos": "of cheeses"
+}

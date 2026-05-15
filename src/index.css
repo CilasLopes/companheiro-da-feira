@@ -1,0 +1,88 @@
+@import url('https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400..800;1,400..800&family=Be+Vietnam+Pro:wght@100;200;300;400;500;600;700;800;900&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-display: "EB Garamond", serif;
+  --font-body: "Be Vietnam Pro", sans-serif;
+
+  --color-surface: #fbf9f5;
+  --color-primary: #061b0e;
+  --color-primary-container: #1b3022;
+  --color-primary-fixed: #d0e9d4;
+  --color-primary-fixed-dim: #b4cdb8;
+  --color-on-primary: #ffffff;
+  --color-on-primary-container: #819986;
+  --color-on-primary-fixed: #0b2013;
+
+  --color-secondary: #a53c18;
+  --color-secondary-container: #ff7d55;
+  --color-on-secondary: #ffffff;
+  --color-on-secondary-container: #6e1c00;
+
+  --color-tertiary: #1b1708;
+  --color-tertiary-fixed: #ece2c9;
+  --color-on-tertiary-fixed: #201b0c;
+
+  --color-on-surface: #1b1c1a;
+  --color-on-surface-variant: #434843;
+  --color-outline: #737973;
+  --color-outline-variant: #c3c8c1;
+
+  --color-surface-container-low: #f5f3ef;
+  --color-surface-container: #efeeea;
+  --color-surface-container-high: #eae8e4;
+  --color-surface-container-highest: #e4e2de;
+
+  --color-error: #ba1a1a;
+  --color-error-container: #ffdad6;
+  --color-on-error: #ffffff;
+  --color-on-error-container: #410002;
+
+  --radius-organic: 60% 40% 70% 30% / 40% 50% 60% 50%;
+}
+
+@layer base {
+  * {
+    -webkit-tap-highlight-color: transparent;
+  }
+  
+  body {
+    @apply bg-surface text-on-surface font-body overflow-x-hidden antialiased select-none;
+    /* Prevents pull-to-refresh if not needed, but generally good for app feel */
+    overscroll-behavior-y: none;
+  }
+}
+
+.glass-card {
+  @apply backdrop-blur-xl bg-white/40 border border-white/30 shadow-[0_8px_32px_0_rgba(31,38,135,0.07)];
+}
+
+.glass-nav {
+  @apply backdrop-blur-2xl bg-surface/80 border-t border-white/20 shadow-[0_-8px_32px_rgba(0,0,0,0.05)];
+}
+
+@keyframes pulse-subtle {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+.animate-pulse-subtle {
+  animation: pulse-subtle 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+.organic-shape {
+  border-radius: var(--radius-organic);
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* Custom scroll shadow for mobile */
+.mask-edges {
+  mask-image: linear-gradient(to right, transparent, black 5%, black 95%, transparent);
+}

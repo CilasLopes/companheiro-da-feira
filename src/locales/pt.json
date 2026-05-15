@@ -1,0 +1,260 @@
+{
+  "app_name": "Companheiro da Feira",
+  "header": {
+    "notifications_title": "Avisos",
+    "notifications_clear_all": "Limpar Tudo",
+    "notifications_empty": "Nenhum aviso no momento",
+    "notif_urgent": "Urgente",
+    "notif_event": "Evento",
+    "notif_info": "Informativo"
+  },
+  "footer": {
+    "home": "Início",
+    "market": "Mercado",
+    "map": "Explorar",
+    "list": "Lista"
+  },
+  "market": {
+    "title": "FEIRA",
+    "subtitle": "MONTE SUA LISTA DE COMPRAS",
+    "search": "O que você procura?",
+    "add_to_list": "Adicionar à lista"
+  },
+  "list": {
+    "title": "Minha Lista",
+    "status": "{{count}} de {{total}} concluídos",
+    "empty": "Sua lista está vazia.",
+    "saved": "Salvas",
+    "save": "Salvar",
+    "clear": "Limpar",
+    "share": "Compartilhar",
+    "clear_all": "Limpar Tudo",
+    "new": "Nova"
+  },
+  "mercado": {
+    "search_placeholder": "Buscar produtos...",
+    "title": "Mercado Local",
+    "subtitle": "Escolha o melhor da estação",
+    "cancel": "Cancelar",
+    "see_more": "Ver mais",
+    "results_for": "Resultados para \"{{query}}\"",
+    "type_to_search": "Digite o que você procura",
+    "no_products": "Nenhum produto encontrado...",
+    "your_list": "Sua Lista",
+    "items_selected": "{{count}} itens selecionados",
+    "view_list": "Ver Lista",
+    "info_card_title": "Monte sua lista de feira!",
+    "info_card_desc": "Este é um espaço para você conhecer os produtos e organizar suas compras. Não realizamos vendas online — a feira é o lugar do encontro!",
+    "categories": {
+      "highlights": "Destaques",
+      "organics": "Orgânicos",
+      "greens": "Verduras",
+      "vegetables": "Legumes",
+      "fruits": "Frutas",
+      "spices": "Temperos"
+    }
+  },
+  "home": {
+    "happening_now": "Acontecendo Agora",
+    "next_fair": "Próxima Feira",
+    "no_fair_scheduled": "Nenhuma feira programada para os próximos dias.",
+    "plan_title": "Qual o seu plano?",
+    "market_tab": "Mercado",
+    "market_title": "Comprar Fresh",
+    "cafe_tab": "Pausa",
+    "cafe_title": "Café no Parque",
+    "explore_tab": "Explorar",
+    "explore_title": "Descobrir Locais",
+    "plan_tab": "Planejar",
+    "plan_title_card": "Minha Lista",
+    "origin_tab": "Origem & História",
+    "origin_title": "Conheça quem planta o que você come",
+    "who_makes_title": "Quem faz a sua feira",
+    "see_stories": "Ver Histórias",
+    "partners_title": "Restaurantes Parceiros",
+    "see_all": "Ver Todos",
+    "address": "Endereço",
+    "opening_hours": "Horário de Funcionamento",
+    "about": "Sobre",
+    "google_maps": "Ver no Google Maps",
+    "schedule_format": "{{day}}, das {{start}} às {{end}}",
+    "days": {
+      "Sunday": "Domingo",
+      "Monday": "Segunda-feira",
+      "Tuesday": "Terça-feira",
+      "Wednesday": "Quarta-feira",
+      "Thursday": "Quinta-feira",
+      "Friday": "Sexta-feira",
+      "Saturday": "Sábado"
+    }
+  },
+  "explore": {
+    "guide_title": "Guia da Feira",
+    "guide_subtitle": "O seu companheiro para descobrir o melhor do mês.",
+    "season_title": "Destaques da Temporada",
+    "agenda_title": "Agenda",
+    "agenda_fair_days": "Dias de Feira e Local",
+    "agenda_special_events": "Eventos Especiais",
+    "cooking_title": "Cozinhando com a Feira",
+    "cooking_subtitle": "ARTESANAL & SAUDÁVEL",
+    "intro": "Introdução",
+    "ingredients": "Ingredientes",
+    "no_ingredients": "Nenhum ingrediente listado.",
+    "instructions": "Modo de Preparo",
+    "no_instructions": "Nenhuma instrução listada.",
+    "time_range": "{{start}} às {{end}}"
+  },
+  "partners": {
+    "title": "Parceiros Locais",
+    "subtitle": "Restaurantes e iniciativas que apoiam a produção local.",
+    "view_map": "Ver no Mapa",
+    "be_partner_title": "Quer ser um parceiro?",
+    "be_partner_subtitle": "Junte-se à nossa rede de estabelecimentos que valorizam o alimento fresco e sustentável.",
+    "learn_more": "Saiba Mais"
+  },
+  "producers": {
+    "local_producer": "Produtor Local",
+    "our_story": "Nossa História",
+    "no_producers": "Nenhum produtor cadastrado no momento."
+  },
+  "admin": {
+    "title": "Painel Administrativo",
+    "back": "Voltar ao App",
+    "sections": {
+      "hero": "Banner",
+      "fair": "Agenda",
+      "events": "Eventos",
+      "producers": "Produtores",
+      "products": "Mercado",
+      "recipes": "Receitas",
+      "restaurants": "Parceiros",
+      "cafe": "Café",
+      "seasonal": "Sazonal",
+      "notifications": "Avisos",
+      "settings": "Configurações"
+    },
+    "save": "Salvar",
+    "delete": "Excluir",
+    "edit": "Editar",
+    "cancel": "Cancelar",
+    "products": {
+      "add_title": "Adicionar Produto",
+      "name_placeholder": "Nome",
+      "type_placeholder": "Tipo (ex: Orgânico, Artesanal)",
+      "price_placeholder": "Preço (ex: R$ 5,00)",
+      "image_placeholder": "URL da Imagem",
+      "active_list": "Produtos Cadastrados"
+    },
+    "recipes": {
+      "add_title": "Adicionar Receita",
+      "title_placeholder": "Título",
+      "time_placeholder": "Tempo (ex: 30 min)",
+      "diff_placeholder": "Dificuldade (ex: Médio)",
+      "intro_placeholder": "Introdução rápida",
+      "ingredients_placeholder": "Ingredientes (um por linha)",
+      "instructions_placeholder": "Modo de Preparo",
+      "image_placeholder": "URL da Imagem (opcional)",
+      "active_list": "Receitas Cadastradas"
+    },
+    "events": {
+      "add_title": "Adicionar Evento",
+      "title_placeholder": "Título do Evento",
+      "desc_placeholder": "Descrição curta do evento",
+      "date_label": "Data",
+      "time_label": "Horário",
+      "location_placeholder": "Local",
+      "active_list": "Eventos Cadastrados"
+    },
+    "restaurants": {
+      "add_title": "Adicionar Parceiro/Restaurante",
+      "name_placeholder": "Nome",
+      "type_placeholder": "Tipo (ex: Vegano, Vegetariano)",
+      "address_placeholder": "Endereço (ex: Av. Paulista)",
+      "open_label": "Abre às",
+      "close_label": "Fecha às",
+      "desc_placeholder": "Descrição sobre o restaurante (opcional)",
+      "image_placeholder": "URL da Imagem (opcional)",
+      "active_list": "Parceiros Cadastrados"
+    },
+    "cafe": {
+      "add_title": "Adicionar Item ao Café",
+      "name_placeholder": "Nome",
+      "category_placeholder": "Categoria",
+      "price_placeholder": "Preço (ex: R$ 8,00)",
+      "desc_placeholder": "Descrição rápida",
+      "ingredients_placeholder": "Ingredientes",
+      "image_placeholder": "URL da Imagem (opcional)",
+      "active_list": "Cardápio do Café"
+    },
+    "seasonal": {
+      "add_title": "Adicionar Destaque Temporada",
+      "name_placeholder": "Nome (ex: Morango)",
+      "benefit_placeholder": "Benefício (ex: Vitamina C)",
+      "image_placeholder": "URL da Imagem",
+      "active_list": "Itens da Temporada"
+    },
+    "fair": {
+      "add_title": "Adicionar Dia de Feira",
+      "day_label": "Dia da Semana",
+      "select_day": "Selecionar Dia...",
+      "start_label": "Início",
+      "end_label": "Fim",
+      "location_label": "Localização",
+      "location_placeholder": "Ex: Parque da Cidade",
+      "accessibility_label": "Acessibilidade (Opcional)",
+      "accessibility_placeholder": "Ex: Rampa de acesso",
+      "save_btn": "Salvar Dia de Feira",
+      "active_list": "Programação Atual"
+    },
+    "notifications": {
+      "add_title": "Enviar Notificação / Aviso",
+      "title_label": "Título do Alerta",
+      "title_placeholder": "Ex: Mudança de Local",
+      "msg_label": "Mensagem",
+      "msg_placeholder": "Descreva o evento ou mudança...",
+      "type_label": "Tipo de Aviso",
+      "types": {
+        "info": "Informativo",
+        "warning": "Urgente",
+        "event": "Evento",
+        "success": "Sucesso"
+      },
+      "send_btn": "Disparar Notificação",
+      "history_title": "Histórico de Envios",
+      "empty_history": "Nenhuma notificação enviada ainda."
+    },
+    "settings": {
+      "title": "Configurações e Idioma",
+      "language_label": "Idioma do Sistema",
+      "about_description": "O aplicativo detecta automaticamente o idioma do seu sistema. Use as opções acima para forçar um idioma específico. As traduções abrangem nomes de seções, botões e mensagens do sistema."
+    }
+  },
+  "months": {
+    "JANEIRO": "JAN",
+    "FEVEREIRO": "FEV",
+    "MARÇO": "MAR",
+    "ABRIL": "ABR",
+    "MAIO": "MAIO",
+    "JUNHO": "JUN",
+    "JULHO": "JUL",
+    "AGOSTO": "AGO",
+    "SETEMBRO": "SET",
+    "OUTUBRO": "OUT",
+    "NOVEMBRO": "NOV",
+    "DEZEMBRO": "DEZ",
+    "JAN": "JAN",
+    "FEV": "FEV",
+    "MAR": "MAR",
+    "ABR": "ABR",
+    "MAI": "MAIO",
+    "JUN": "JUN",
+    "JUL": "JUL",
+    "AGO": "AGO",
+    "SET": "SET",
+    "OUT": "OUT",
+    "NOV": "NOV",
+    "DEZ": "DEZ"
+  },
+  "Degustação": "Degustação",
+  "de queijos": "de queijos"
+}
