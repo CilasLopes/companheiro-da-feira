@@ -10,10 +10,10 @@ export const Produtores = ({ producers, fairSchedules = [] }: { producers: any[]
   const { t } = useTranslation();
   return (
     <div className="pb-40 space-y-20">
-      {producers.map((producer, index) => (
+      {producers.filter(p => !p.hidden).map((producer, index) => (
         <section key={producer.id} className="relative px-4 pt-6">
           {/* Hero Header para cada produtor */}
-          <div className="relative w-full h-[500px] overflow-hidden rounded-[32px] shadow-lg">
+          <div className="relative w-full aspect-square overflow-hidden rounded-[32px] shadow-lg">
             <MotionRemoteImage 
               initial={{ scale: 1.2 }}
               animate={{ scale: 1 }}

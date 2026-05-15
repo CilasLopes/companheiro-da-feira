@@ -4,7 +4,7 @@ import {
   Plus, Trash2, Edit2, Check, X, GripVertical, Bell, AlertCircle, 
   Calendar, Info, Layout, Megaphone, Users, ShoppingBag, 
   BookOpen, Utensils, Coffee, Sparkles, ChevronLeft, Languages, Globe, Settings, Gift,
-  Download, Upload, FileJson, FileSpreadsheet, History
+  Download, Upload, FileJson, FileSpreadsheet, History, Eye, EyeOff
 } from 'lucide-react';
 import { exportToJSON, exportToCSV, parseCSV } from '../utils/dataTransfer';
 import { useTranslation } from 'react-i18next';
@@ -601,6 +601,7 @@ export const Admin = ({
                         setEditingProducer={setEditingProducer} 
                         saveProducer={saveProducer} 
                         deleteProducer={deleteProducer} 
+                        toggleHidden={() => setProducers(producers.map((prod: any) => prod.id === p.id ? { ...prod, hidden: !prod.hidden } : prod))}
                       />
                     ))}
                   </Reorder.Group>
@@ -1723,7 +1724,7 @@ const HeroSlideItem = ({ slide, editingHeroSlide, setEditingHeroSlide, saveHeroS
   );
 };
 
-const ProducerItem = ({ p, editingProducer, setEditingProducer, saveProducer, deleteProducer }: any) => {
+const ProducerItem = ({ p, editingProducer, setEditingProducer, saveProducer, deleteProducer, toggleHidden }: any) => {
   const controls = useDragControls();
   return (
     <Reorder.Item 
@@ -1756,17 +1757,27 @@ const ProducerItem = ({ p, editingProducer, setEditingProducer, saveProducer, de
         <>
           <div className="flex items-center gap-2">
             <DragHandle controls={controls} />
-            <div className="flex items-center gap-3">
+            <div className={`flex items-center gap-3 ${p.hidden ? 'opacity-50 grayscale' : ''}`}>
               <RemoteImage src={p.image} alt="" className="w-12 h-12 rounded-lg object-cover shadow-sm" />
               <div>
-                <p className="font-bold text-primary text-sm">{p.name}</p>
+                <p className="font-bold text-primary text-sm flex items-center gap-2">
+                  {p.name}
+                  {p.hidden && <span className="text-[10px] bg-outline-variant/20 text-on-surface-variant px-2 py-0.5 rounded-full uppercase tracking-widest font-black">OCULTO</span>}
+                </p>
                 <p className="text-[10px] text-on-surface-variant line-clamp-1">{p.location}</p>
               </div>
             </div>
           </div>
-          <div className="flex gap-1">
-            <button onClick={() => setEditingProducer(p)} className="p-2 text-primary hover:bg-primary/10 rounded-lg"><Edit2 size={16}/></button>
-            <button onClick={() => deleteProducer(p.id)} className="p-2 text-error hover:bg-error/10 rounded-lg"><Trash2 size={16}/></button>
+          <div className="flex gap-1 items-center">
+            <button onClick={toggleHidden} className="p-2 text-on-surface-variant hover:bg-outline-variant/10 rounded-lg" title={p.hidden ? "Mostrar na lista pública" : "Ocultar da lista pública"}>
+              {p.hidden ? <EyeOff size={16}/> : <Eye size={16}/>}
+            </button>
+            <button onClick={() => setEditingProducer(p)} className="p-2 text-primary hover:bg-primary/10 rounded-lg" title="Editar"><Edit2 size={16}/></button>
+            <button onClick={() => {
+              if (window.confirm('Tem certeza que deseja excluir este produtor? Essa ação não pode ser desfeita. Se o produtor só estiver ausente temporariamente, use o botão de ocultar (olho).')) {
+                deleteProducer(p.id);
+              }
+            }} className="p-2 text-error hover:bg-error/10 rounded-lg" title="Excluir"><Trash2 size={16}/></button>
           </div>
         </>
       )}
