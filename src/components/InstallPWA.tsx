@@ -97,28 +97,28 @@ export function InstallPWA() {
                 <h2 className="text-2xl font-display font-black text-emerald-950 leading-tight">
                   Instale para <span className="text-emerald-600">Começar</span>
                 </h2>
-                <p className="mt-2 text-emerald-700 font-medium text-sm">
+                <p className="mt-2 text-emerald-700 font-medium text-base">
                   Para a melhor experiência na feira, instale nosso app.
                 </p>
 
                 <div className="mt-6 space-y-3">
                   <div className="flex items-center gap-3 text-left bg-emerald-50 p-3 rounded-2xl border border-emerald-100">
-                    <div className="w-7 h-7 bg-emerald-600 rounded-full flex items-center justify-center text-white shrink-0">
-                      <PlusSquare size={14} />
+                    <div className="w-8 h-8 bg-emerald-600 rounded-full flex items-center justify-center text-white shrink-0">
+                      <PlusSquare size={16} />
                     </div>
                     <div>
-                      <p className="text-emerald-900 font-bold text-xs">Acesso Instantâneo</p>
-                      <p className="text-emerald-700 text-[10px]">Na sua tela inicial.</p>
+                      <p className="text-emerald-900 font-bold text-sm">Acesso Instantâneo</p>
+                      <p className="text-emerald-700 text-xs">Na sua tela inicial.</p>
                     </div>
                   </div>
 
                   <div className="flex items-center gap-3 text-left bg-emerald-50 p-3 rounded-2xl border border-emerald-100">
-                    <div className="w-7 h-7 bg-emerald-600 rounded-full flex items-center justify-center text-white shrink-0">
-                      <Share size={14} />
+                    <div className="w-8 h-8 bg-emerald-600 rounded-full flex items-center justify-center text-white shrink-0">
+                      <Share size={16} />
                     </div>
                     <div>
-                      <p className="text-emerald-900 font-bold text-xs">Modo Offline</p>
-                      <p className="text-emerald-700 text-[10px]">Mesmo sem internet.</p>
+                      <p className="text-emerald-900 font-bold text-sm">Modo Offline</p>
+                      <p className="text-emerald-700 text-xs">Mesmo sem internet.</p>
                     </div>
                   </div>
                 </div>
@@ -126,7 +126,7 @@ export function InstallPWA() {
                 <div className="mt-6">
                   {isIOS ? (
                     <div className="bg-emerald-600 text-white p-4 rounded-2xl shadow-lg">
-                      <p className="text-xs font-bold flex flex-wrap items-center justify-center gap-2 leading-relaxed text-center">
+                      <p className="text-sm font-bold flex flex-wrap items-center justify-center gap-2 leading-relaxed text-center">
                         Toque em <Share size={18} /> e selecione <br/>
                         <span className="bg-white/20 px-2 py-1 rounded-lg">"Adicionar à Tela de Início"</span>
                       </p>
@@ -153,7 +153,7 @@ export function InstallPWA() {
                             </button>
                           ) : (
                             <div className="bg-emerald-600 text-white p-4 rounded-2xl shadow-lg">
-                              <p className="text-xs font-bold leading-relaxed text-center">
+                              <p className="text-sm font-bold leading-relaxed text-center">
                                 No menu do navegador (<span className="inline-block border border-white/40 rounded px-1">⋮</span> ou <span className="inline-block border border-white/40 rounded px-1">≡</span>) selecione: <br/>
                                 <span className="bg-white/20 px-2 py-1 rounded-lg mt-1.5 inline-block">"Instalar Aplicativo"</span>
                               </p>
@@ -166,7 +166,7 @@ export function InstallPWA() {
                   
                   <button 
                     onClick={() => setShowPrompt(false)}
-                    className="mt-4 text-emerald-400 text-[10px] font-bold uppercase tracking-widest hover:text-emerald-600 transition-colors"
+                    className="mt-5 text-emerald-400 text-xs font-bold uppercase tracking-widest hover:text-emerald-600 transition-colors"
                   >
                     Talvez mais tarde
                   </button>
