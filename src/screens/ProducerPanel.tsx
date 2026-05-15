@@ -13,13 +13,16 @@ import {
 const translateDayToPT = (day: string): string => {
   if (!day) return '';
   const ptDaysMap: { [key: string]: string } = {
+    'SUNDAY': 'Domingo', 'MONDAY': 'Segunda-feira', 'TUESDAY': 'Terça-feira', 'WEDNESDAY': 'Quarta-feira',
+    'THURSDAY': 'Quinta-feira', 'FRIDAY': 'Sexta-feira', 'SATURDAY': 'Sábado',
     'Sunday': 'Domingo', 'Monday': 'Segunda-feira', 'Tuesday': 'Terça-feira', 'Wednesday': 'Quarta-feira',
     'Thursday': 'Quinta-feira', 'Friday': 'Sexta-feira', 'Saturday': 'Sábado',
     'DOMINGO': 'Domingo', 'SEGUNDA': 'Segunda-feira', 'TERÇA': 'Terça-feira', 'QUARTA': 'Quarta-feira',
     'QUINTA': 'Quinta-feira', 'SEXTA': 'Sexta-feira', 'SABADO': 'Sábado',
     'Sábado': 'Sábado', 'Segunda': 'Segunda-feira', 'Terça': 'Terça-feira', 'Quarta': 'Quarta-feira', 'Quinta': 'Quinta-feira', 'Sexta': 'Sexta-feira'
   };
-  return ptDaysMap[day] || ptDaysMap[day.toUpperCase()] || day;
+  const normalized = day.toUpperCase();
+  return ptDaysMap[normalized] || ptDaysMap[day] || day;
 };
 
 
