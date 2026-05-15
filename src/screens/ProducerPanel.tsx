@@ -250,10 +250,10 @@ export const ProducerPanel = ({ producers, setProducers, products, setProducts, 
   return (
     <motion.div initial={{ opacity: 0, x: 40 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: 40 }}
       transition={{ type: 'spring', damping: 28, stiffness: 280 }}
-      className="fixed inset-0 z-[200] bg-surface flex flex-col md:flex-row h-screen overflow-hidden">
+      className="fixed inset-0 z-[200] bg-surface flex flex-col md:flex-row h-screen overflow-y-auto md:overflow-hidden">
 
       {/* ── SIDEBAR ── */}
-      <div className="w-full md:w-80 bg-surface-container-low border-b md:border-b-0 md:border-r border-outline-variant/20 flex flex-col shrink-0">
+      <div className="w-full md:w-80 bg-surface-container-low border-b md:border-b-0 md:border-r border-outline-variant/20 flex flex-col shrink-0 md:h-full">
         <div className="p-8 flex items-center justify-between">
           <div className="flex items-center gap-4">
             <div className="relative">
@@ -271,9 +271,15 @@ export const ProducerPanel = ({ producers, setProducers, products, setProducts, 
               </div>
             </div>
           </div>
+          <button 
+            onClick={onClose}
+            className="md:hidden p-2 bg-surface-container hover:bg-surface-container-high rounded-full text-on-surface-variant transition-colors"
+          >
+            <X size={20} />
+          </button>
         </div>
 
-        <nav className="flex-1 px-4 py-2 space-y-1 overflow-y-auto">
+        <nav className="px-4 py-2 space-y-1 md:flex-1 md:overflow-y-auto">
           {NAV.map(item => {
             const Icon = item.icon;
             const isActive = activeTab === item.id;
@@ -300,7 +306,7 @@ export const ProducerPanel = ({ producers, setProducers, products, setProducts, 
       </div>
 
       {/* ── CONTENT ── */}
-      <main className="flex-1 overflow-y-auto bg-surface-container-lowest/30 pb-24 md:pb-8">
+      <main className="flex-1 md:overflow-y-auto bg-surface-container-lowest/30 pb-24 md:pb-8">
         <AnimatePresence mode="wait">
           <motion.div key={activeTab} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }}
             className="p-6 md:p-10 max-w-5xl mx-auto space-y-8">
