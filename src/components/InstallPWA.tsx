@@ -6,6 +6,7 @@ export function InstallPWA() {
   const [deferredPrompt, setDeferredPrompt] = useState<any>(null);
   const [showPrompt, setShowPrompt] = useState(false);
   const [isIOS, setIsIOS] = useState(false);
+  const [isReady, setIsReady] = useState(false);
 
   useEffect(() => {
     // Check if already installed
@@ -25,16 +26,26 @@ export function InstallPWA() {
       setShowPrompt(true);
     }
 
+    // Safety timeout: if event doesn't fire in 4s, show manual instructions
+    const timer = setTimeout(() => {
+      setIsReady(true);
+      console.log('PWA: Ready timer triggered');
+    }, 4000);
+
     // Listen for beforeinstallprompt
     const handler = (e: any) => {
       e.preventDefault();
       setDeferredPrompt(e);
+      setIsReady(true);
       console.log('beforeinstallprompt event fired');
       setShowPrompt(true);
     };
 
     window.addEventListener('beforeinstallprompt', handler);
-    return () => window.removeEventListener('beforeinstallprompt', handler);
+    return () => {
+      window.removeEventListener('beforeinstallprompt', handler);
+      clearTimeout(timer);
+    };
   }, []);
 
   const handleInstall = async () => {
@@ -114,7 +125,7 @@ export function InstallPWA() {
               <div className="mt-10">
                 {isIOS ? (
                   <div className="bg-emerald-600 text-white p-5 rounded-3xl shadow-lg shadow-emerald-200">
-                    <p className="text-sm font-bold flex flex-wrap items-center justify-center gap-2 leading-relaxed">
+                    <p className="text-sm font-bold flex flex-wrap items-center justify-center gap-2 leading-relaxed text-center">
                       Toque em <Share size={20} /> e selecione <br/>
                       <span className="bg-white/20 px-3 py-1 rounded-xl">"Adicionar à Tela de Início"</span>
                     </p>
@@ -131,17 +142,22 @@ export function InstallPWA() {
                       </button>
                     ) : (
                       <div className="space-y-4">
-                        <button
-                          disabled
-                          className="w-full bg-emerald-100 text-emerald-400 font-bold py-5 px-6 rounded-3xl flex items-center justify-center gap-3 text-lg cursor-not-allowed"
-                        >
-                          <div className="w-5 h-5 border-2 border-emerald-400 border-t-transparent rounded-full animate-spin" />
-                          Preparando Instalação...
-                        </button>
-                        <p className="text-[10px] text-emerald-400 font-medium">
-                          Se o botão não ativar, use o menu do navegador <br/>
-                          e selecione "Instalar Aplicativo"
-                        </p>
+                        {!isReady ? (
+                          <button
+                            disabled
+                            className="w-full bg-emerald-50 text-emerald-300 font-bold py-5 px-6 rounded-3xl flex items-center justify-center gap-3 text-lg cursor-wait"
+                          >
+                            <div className="w-5 h-5 border-2 border-emerald-300 border-t-transparent rounded-full animate-spin" />
+                            Preparando...
+                          </button>
+                        ) : (
+                          <div className="bg-emerald-600 text-white p-5 rounded-3xl shadow-lg shadow-emerald-200">
+                            <p className="text-sm font-bold leading-relaxed text-center">
+                              Clique no menu do navegador (três pontos <span className="inline-block border border-white/40 rounded px-1">⋮</span> ou <span className="inline-block border border-white/40 rounded px-1">≡</span>) e selecione: <br/>
+                              <span className="bg-white/20 px-3 py-1 rounded-xl mt-2 inline-block">"Instalar Aplicativo"</span>
+                            </p>
+                          </div>
+                        )}
                       </div>
                     )}
                   </>

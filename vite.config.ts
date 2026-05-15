@@ -12,7 +12,16 @@ export default defineConfig(({mode}) => {
       tailwindcss(),
       VitePWA({
         registerType: 'autoUpdate',
-        includeAssets: ['favicon.png', 'icon-192.png', 'icon-512.png'],
+        devOptions: {
+          enabled: true,
+          type: 'module',
+        },
+        workbox: {
+          globPatterns: ['**/*.{js,css,html,ico,png,svg,json}'],
+          cleanupOutdatedCaches: true,
+          clientsClaim: true,
+          skipWaiting: true
+        },
         manifest: {
           name: 'Companheiro da Feira',
           short_name: 'Feira App',
