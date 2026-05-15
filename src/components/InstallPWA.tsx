@@ -49,16 +49,33 @@ export function InstallPWA() {
   }, []);
 
   const handleInstall = async () => {
-    if (!deferredPrompt) return;
-    
-    deferredPrompt.prompt();
-    const { outcome } = await deferredPrompt.userChoice;
-    
-    if (outcome === 'accepted') {
-      console.log('User accepted the install prompt');
+    if (!deferredPrompt) {
+      // Prompt não disponível — mostra instruções manuais
       setDeferredPrompt(null);
-      setShowPrompt(false);
+      setIsReady(true);
+      return;
     }
+    
+    try {
+      await deferredPrompt.prompt();
+      const { outcome } = await deferredPrompt.userChoice;
+      
+      if (outcome === 'accepted') {
+        console.log('User accepted the install prompt');
+        setShowPrompt(false);
+      } else {
+        console.log('User dismissed the install prompt');
+        // Mostrar instrução manual já que o prompt foi recusado
+        setIsReady(true);
+      }
+    } catch (err) {
+      console.error('Install prompt failed:', err);
+      // Fallback: mostrar instruções manuais
+      setIsReady(true);
+    }
+    
+    // Limpar referência — prompt só pode ser usado uma vez
+    setDeferredPrompt(null);
   };
 
   const dismissPrompt = () => {

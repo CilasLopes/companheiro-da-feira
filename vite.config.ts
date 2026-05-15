@@ -23,9 +23,12 @@ export default defineConfig(({mode}) => {
           skipWaiting: true
         },
         manifest: {
+          id: '/',
           name: 'Companheiro da Feira',
           short_name: 'Feira App',
           description: 'Seu guia completo para as feiras livres',
+          start_url: '/',
+          scope: '/',
           theme_color: '#10b981',
           background_color: '#ffffff',
           display: 'standalone',
