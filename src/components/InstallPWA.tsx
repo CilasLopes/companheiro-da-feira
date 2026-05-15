@@ -60,59 +60,89 @@ export function InstallPWA() {
     <AnimatePresence>
       {showPrompt && (
         <motion.div
-          initial={{ y: 100, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          exit={{ y: 100, opacity: 0 }}
-          className="fixed bottom-24 left-4 right-4 z-50"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          className="fixed inset-0 z-[2000] flex items-center justify-center p-6 bg-emerald-950/40 backdrop-blur-2xl"
         >
-          <div className="bg-white/90 backdrop-blur-xl border border-emerald-100 rounded-3xl shadow-2xl p-5 overflow-hidden relative">
-            <button 
-              onClick={dismissPrompt}
-              className="absolute top-4 right-4 p-1 rounded-full bg-emerald-50 text-emerald-600 hover:bg-emerald-100 transition-colors"
-            >
-              <X size={18} />
-            </button>
-
-            <div className="flex items-center gap-4">
-              <div className="w-16 h-16 bg-emerald-500 rounded-2xl flex items-center justify-center text-white shadow-lg shadow-emerald-200 shrink-0">
-                <Download size={32} />
-              </div>
-              
-              <div className="flex-1 min-w-0">
-                <h3 className="text-emerald-900 font-bold text-lg leading-tight">
-                  Instalar App
-                </h3>
-                <p className="text-emerald-600 text-sm leading-tight mt-1">
-                  Acesse a feira direto da sua tela inicial!
-                </p>
+          <motion.div
+            initial={{ scale: 0.9, y: 20 }}
+            animate={{ scale: 1, y: 0 }}
+            className="bg-white w-full max-w-sm rounded-[40px] shadow-2xl p-8 relative overflow-hidden"
+          >
+            {/* Background pattern */}
+            <div className="absolute top-0 left-0 w-full h-32 bg-emerald-600 flex items-center justify-center overflow-hidden">
+              <motion.div 
+                animate={{ rotate: 360 }}
+                transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+                className="absolute w-64 h-64 border-[20px] border-emerald-500/30 rounded-full"
+              />
+              <div className="relative w-20 h-20 bg-white rounded-3xl shadow-xl flex items-center justify-center text-emerald-600">
+                <Download size={40} />
               </div>
             </div>
 
-            <div className="mt-5">
-              {isIOS ? (
-                <div className="bg-emerald-50 rounded-2xl p-3 flex items-center gap-3 text-emerald-800 text-sm border border-emerald-100">
-                  <div className="flex flex-wrap items-center gap-1 leading-relaxed">
-                    <span>Toque em</span>
-                    <Share size={18} className="inline mx-1 text-emerald-600" />
-                    <span>e selecione</span>
-                    <span className="font-bold inline-flex items-center gap-1 bg-white px-2 py-0.5 rounded-lg shadow-sm border border-emerald-100">
-                      <PlusSquare size={14} /> Adicionar à Tela de Início
-                    </span>
+            <div className="mt-28 text-center">
+              <h2 className="text-3xl font-display font-black text-emerald-950 leading-tight">
+                Instale para <span className="text-emerald-600">Começar</span>
+              </h2>
+              <p className="mt-4 text-emerald-700 font-medium">
+                Para garantir a melhor experiência na feira, instale nosso aplicativo oficial.
+              </p>
+
+              <div className="mt-8 space-y-4">
+                <div className="flex items-start gap-4 text-left bg-emerald-50 p-4 rounded-2xl border border-emerald-100">
+                  <div className="w-8 h-8 bg-emerald-600 rounded-full flex items-center justify-center text-white shrink-0">
+                    <PlusSquare size={16} />
+                  </div>
+                  <div>
+                    <p className="text-emerald-900 font-bold text-sm">Acesso Instantâneo</p>
+                    <p className="text-emerald-700 text-xs mt-0.5">Abra o app direto da sua tela inicial.</p>
                   </div>
                 </div>
-              ) : (
-                <button
-                  onClick={handleInstall}
-                  className="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3.5 px-6 rounded-2xl transition-all shadow-lg shadow-emerald-200 active:scale-95 flex items-center justify-center gap-2"
+
+                <div className="flex items-start gap-4 text-left bg-emerald-50 p-4 rounded-2xl border border-emerald-100">
+                  <div className="w-8 h-8 bg-emerald-600 rounded-full flex items-center justify-center text-white shrink-0">
+                    <Share size={16} />
+                  </div>
+                  <div>
+                    <p className="text-emerald-900 font-bold text-sm">Modo Offline</p>
+                    <p className="text-emerald-700 text-xs mt-0.5">Consulte as feiras mesmo sem internet.</p>
+                  </div>
+                </div>
+              </div>
+
+              <div className="mt-10">
+                {isIOS ? (
+                  <div className="bg-emerald-600 text-white p-5 rounded-3xl shadow-lg shadow-emerald-200">
+                    <p className="text-sm font-bold flex flex-wrap items-center justify-center gap-2 leading-relaxed">
+                      Toque em <Share size={20} /> e selecione <br/>
+                      <span className="bg-white/20 px-3 py-1 rounded-xl">"Adicionar à Tela de Início"</span>
+                    </p>
+                  </div>
+                ) : (
+                  <button
+                    onClick={handleInstall}
+                    className="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-5 px-6 rounded-3xl transition-all shadow-xl shadow-emerald-200 active:scale-95 flex items-center justify-center gap-3 text-lg"
+                  >
+                    <Download size={24} />
+                    Instalar Aplicativo
+                  </button>
+                )}
+                
+                {/* Opcional: Um botão de "Não agora" bem discreto se necessário, 
+                    mas conforme pedido, estamos forçando */}
+                <button 
+                  onClick={() => setShowPrompt(false)}
+                  className="mt-6 text-emerald-400 text-xs font-bold uppercase tracking-widest hover:text-emerald-600 transition-colors"
                 >
-                  <Download size={20} />
-                  Instalar Agora
+                  Talvez mais tarde
                 </button>
-              )}
+              </div>
             </div>
-            
-            <div className="absolute -bottom-12 -right-12 w-32 h-32 bg-emerald-400/10 rounded-full blur-2xl" />
-          </div>
+
+            <div className="absolute -bottom-16 -right-16 w-40 h-40 bg-emerald-100 rounded-full" />
+          </motion.div>
         </motion.div>
       )}
     </AnimatePresence>

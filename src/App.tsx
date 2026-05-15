@@ -16,6 +16,7 @@ import { Admin } from './screens/Admin';
 import { ProducerPanel } from './screens/ProducerPanel';
 import { isPriceFilled } from './utils/helpers';
 import { InstallPWA } from './components/InstallPWA';
+import { SplashScreen } from './components/SplashScreen';
 
 import { 
   defaultProducts, 
@@ -34,6 +35,14 @@ function App() {
   const [showAdmin, setShowAdmin] = useState(false);
   const [showProducerPanel, setShowProducerPanel] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsLoading(false);
+    }, 2500); // Mostra o splash por 2.5 segundos
+    return () => clearTimeout(timer);
+  }, []);
   const [savedLists, setSavedLists] = useState(() => {
     const saved = localStorage.getItem('savedLists');
     return saved ? JSON.parse(saved) : [];
@@ -292,22 +301,25 @@ function App() {
 
   return (
     <PullToRefresh onRefresh={handleRefresh}>
-      <div 
-        className="min-h-screen bg-surface font-sans text-on-surface selection:bg-primary/20"
-      >
-        {activeTab !== 'market' && (
-        <Header 
-          title={getPageTitle()} 
-          showBack={activeTab !== 'home'} 
-          onBack={() => setActiveTab('home')}
-          onProducerClick={() => setShowProducerPanel(true)}
-          notifications={notifications}
-          setNotifications={setNotifications}
-        />
-      )}
+      <div className="min-h-screen bg-surface font-sans text-on-surface selection:bg-primary/20">
+        <AnimatePresence>
+          {isLoading && <SplashScreen />}
+        </AnimatePresence>
 
-      <main className="overflow-x-hidden w-full pt-20">
-        <AnimatePresence mode="wait">
+        {!isLoading && activeTab !== 'market' && (
+          <Header 
+            title={getPageTitle()} 
+            showBack={activeTab !== 'home'} 
+            onBack={() => setActiveTab('home')}
+            onProducerClick={() => setShowProducerPanel(true)}
+            notifications={notifications}
+            setNotifications={setNotifications}
+          />
+        )}
+
+      {!isLoading && (
+        <main className="overflow-x-hidden w-full pt-20">
+          <AnimatePresence mode="wait">
           <motion.div
             key={activeTab}
             initial={{ opacity: 0, x: 20 }}
@@ -320,10 +332,11 @@ function App() {
           </motion.div>
         </AnimatePresence>
       </main>
+      )}
 
       {/* Bottom Navigation */}
-      <BottomNav activeTab={activeTab} setActiveTab={setActiveTab} listCount={items.length} />
-      <InstallPWA />
+      {!isLoading && <BottomNav activeTab={activeTab} setActiveTab={setActiveTab} listCount={items.length} />}
+      {!isLoading && <InstallPWA />}
 
       <AnimatePresence>
         {showWelcome && (
