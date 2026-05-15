@@ -5,7 +5,8 @@ export const getGoogleDriveDirectLink = (url: string): string => {
   // Se for um ID bruto (não é URL, mas tem o formato de ID do Drive)
   // IDs do Drive costumam ter entre 25 e 40 caracteres e são alfanuméricos
   if (!url.includes('/') && url.length > 20) {
-    return `https://drive.google.com/thumbnail?id=${url}&sz=w1200`;
+    const fileId = url.trim();
+    return `https://images1-focus-opensocial.googleusercontent.com/gadgets/proxy?container=focus&refresh=2592000&url=https://drive.google.com/uc?id=${fileId}`;
   }
 
   // Se já for um link direto (lh3), retorna original
@@ -32,8 +33,8 @@ export const getGoogleDriveDirectLink = (url: string): string => {
     }
 
     if (fileId) {
-      // Usar o endpoint de thumbnail que é o mais compatível com mobile
-      return `https://drive.google.com/thumbnail?id=${fileId}&sz=w1200`;
+      // Usar o proxy de imagens do Google que resolve 99% dos problemas de visualização em mobile
+      return `https://images1-focus-opensocial.googleusercontent.com/gadgets/proxy?container=focus&refresh=2592000&url=https://drive.google.com/uc?id=${fileId}`;
     }
   } catch (e) {
     console.error('Erro ao processar URL do Drive:', e);
