@@ -31,7 +31,6 @@ function App() {
   const { t } = useTranslation();
   const [activeTab, setActiveTab] = useState('home');
   const [showAdmin, setShowAdmin] = useState(false);
-  const [showProducerPanel, setShowProducerPanel] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const [savedLists, setSavedLists] = useState(() => {
     const saved = localStorage.getItem('savedLists');
@@ -311,8 +310,6 @@ function App() {
           title={getPageTitle()} 
           showBack={activeTab !== 'home'} 
           onBack={() => setActiveTab('home')}
-          onAdminClick={() => setShowAdmin(true)}
-          onProducerClick={() => setShowProducerPanel(true)}
           notifications={notifications}
           setNotifications={setNotifications}
         />
@@ -373,18 +370,7 @@ function App() {
         )}
       </AnimatePresence>
 
-      <AnimatePresence>
-        {showProducerPanel && (
-          <ProducerPanel
-            producers={producers}
-            setProducers={setProducers}
-            products={products}
-            setProducts={setProducts}
-            fairSchedules={fairSchedules}
-            onClose={() => setShowProducerPanel(false)}
-          />
-        )}
-      </AnimatePresence>
+
 
       <AnimatePresence>
         {showAdmin && (
