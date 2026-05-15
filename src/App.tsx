@@ -38,10 +38,6 @@ function App() {
     return saved ? JSON.parse(saved) : [];
   });
 
-  // States
-  const [touchStartX, setTouchStartX] = useState<number | null>(null);
-  const [touchEndX, setTouchEndX] = useState<number | null>(null);
-
   const [welcomePopup, setWelcomePopup] = useState(() => {
     const saved = localStorage.getItem('welcomePopup');
     return saved ? JSON.parse(saved) : { active: false, title: 'Feliz Ano Novo!', message: 'Desejamos a todos um próspero ano novo cheio de realizações.', image: '' };
@@ -284,49 +280,12 @@ function App() {
     await new Promise(resolve => setTimeout(resolve, 1500));
   };
 
-  const onTouchStart = (e: React.TouchEvent) => {
-    setTouchEndX(null);
-    setTouchStartX(e.targetTouches[0].clientX);
-  };
 
-  const onTouchMove = (e: React.TouchEvent) => {
-    setTouchEndX(e.targetTouches[0].clientX);
-  };
-
-  const onTouchEnd = () => {
-    if (!touchStartX || !touchEndX) return;
-    const distance = touchStartX - touchEndX;
-    const isLeftSwipe = distance > 60;
-    const isRightSwipe = distance < -60;
-
-    if (isLeftSwipe || isRightSwipe) {
-      const tabs = ['home', 'market', 'explorar', 'list'];
-      const currentIndex = tabs.indexOf(activeTab);
-
-      if (currentIndex !== -1) {
-        if (isLeftSwipe && currentIndex < tabs.length - 1) {
-          if (navigator.vibrate) navigator.vibrate(20);
-          setActiveTab(tabs[currentIndex + 1]);
-        } else if (isRightSwipe && currentIndex > 0) {
-          if (navigator.vibrate) navigator.vibrate(20);
-          setActiveTab(tabs[currentIndex - 1]);
-        }
-      } else {
-        if (isRightSwipe) {
-          if (navigator.vibrate) navigator.vibrate(20);
-          setActiveTab('home');
-        }
-      }
-    }
-  };
 
   return (
     <PullToRefresh onRefresh={handleRefresh}>
       <div 
         className="min-h-screen bg-surface font-sans text-on-surface selection:bg-primary/20"
-        onTouchStart={onTouchStart}
-        onTouchMove={onTouchMove}
-        onTouchEnd={onTouchEnd}
       >
         {activeTab !== 'market' && (
         <Header 
