@@ -118,12 +118,9 @@ export const Explorar = ({ onNavigate, recipes, seasonalItems, events, fairSched
                 </div>
               </div>
               <div className="shrink-0 max-w-[100px]">
-                <div className="bg-white shadow-sm border border-outline-variant/30 px-3 py-2 rounded-2xl flex flex-col items-center text-center">
-                  <span className="text-[8px] font-black uppercase text-on-surface-variant/40 leading-none mb-1">Local</span>
-                  <p className="text-[10px] font-black uppercase tracking-tighter text-primary line-clamp-2 leading-tight">
-                    {schedule.location}
-                  </p>
-                </div>
+                <p className="text-[10px] font-black uppercase tracking-tighter text-secondary bg-secondary/10 px-3 py-1.5 rounded-[16px] shadow-sm border border-secondary/20 text-center line-clamp-2 leading-tight">
+                  {schedule.location}
+                </p>
               </div>
             </motion.div>
           ))}

@@ -172,38 +172,40 @@ export const HomeViva = ({ onNavigate, products, fairSchedules, restaurants = []
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, scale: 0.95 }}
-                className={`relative overflow-hidden bg-white p-5 rounded-[32px] flex items-center justify-between shadow-[0_8px_30px_rgba(0,0,0,0.06)] border ${
+                className={`relative overflow-hidden bg-white p-4 rounded-[32px] flex items-center justify-between shadow-[0_8px_30px_rgba(0,0,0,0.06)] border gap-2 ${
                   schedule.isHappening 
                     ? 'border-primary/40 bg-primary/[0.02]' 
                     : 'border-outline-variant/30'
                 }`}
               >
                 <div className={`absolute top-0 left-0 w-2 h-full bg-gradient-to-b opacity-100 ${schedule.isHappening ? 'from-primary to-emerald-400' : 'from-primary to-secondary'}`} />
-                <div className="flex items-center gap-5 pl-3">
-                  <div className={`w-14 h-14 rounded-[22px] flex items-center justify-center shrink-0 shadow-inner ${schedule.isHappening ? 'bg-primary text-white animate-pulse shadow-primary/30' : 'bg-gradient-to-br from-primary/10 to-primary/5 text-primary'}`}>
-                    <Clock size={24} strokeWidth={schedule.isHappening ? 2.5 : 2} />
+                <div className="flex items-center gap-3 pl-2 flex-1 min-w-0">
+                  <div className={`w-12 h-12 rounded-[20px] flex items-center justify-center shrink-0 shadow-inner ${schedule.isHappening ? 'bg-primary text-white animate-pulse shadow-primary/30' : 'bg-gradient-to-br from-primary/10 to-primary/5 text-primary'}`}>
+                    <Clock size={22} strokeWidth={schedule.isHappening ? 2.5 : 2} />
                   </div>
-                  <div className="space-y-0.5">
-                    <p className={`text-[10px] font-black uppercase tracking-widest ${schedule.isHappening ? 'text-primary' : 'text-on-surface-variant/60'}`}>
+                  <div className="space-y-0.5 min-w-0">
+                    <p className={`text-[10px] font-black uppercase tracking-widest truncate ${schedule.isHappening ? 'text-primary' : 'text-on-surface-variant/60'}`}>
                       {schedule.status}
                     </p>
-                    <p className="font-display font-bold text-primary text-lg leading-tight">
+                    <p className="font-display font-bold text-primary text-lg leading-tight truncate">
                       {translateDay(schedule.day)},{' '}
-                      {i18n.language.startsWith('en') ? 'from' : i18n.language.startsWith('es') ? 'de' : 'das'}{' '}
-                      {schedule.startTime}{' '}
-                      {i18n.language.startsWith('en') ? 'to' : i18n.language.startsWith('es') ? 'a' : 'às'}{' '}
-                      {schedule.endTime}
+                      <span className="truncate block">
+                        {i18n.language.startsWith('en') ? 'from' : i18n.language.startsWith('es') ? 'de' : 'das'}{' '}
+                        {schedule.startTime}{' '}
+                        {i18n.language.startsWith('en') ? 'to' : i18n.language.startsWith('es') ? 'a' : 'às'}{' '}
+                        {schedule.endTime}
+                      </span>
                     </p>
                     {schedule.accessibility && (
                       <div className="flex items-center gap-1.5 pt-1">
-                        <Leaf size={10} className="text-secondary opacity-80" />
-                        <span className="text-[10px] font-medium text-on-surface-variant/70 italic">{schedule.accessibility}</span>
+                        <Leaf size={10} className="text-secondary opacity-80 shrink-0" />
+                        <span className="text-[10px] font-medium text-on-surface-variant/70 italic truncate">{schedule.accessibility}</span>
                       </div>
                     )}
                   </div>
                 </div>
-                <div className="shrink-0 pl-2">
-                  <p className="text-[10px] font-black uppercase tracking-widest text-secondary bg-secondary/10 px-3.5 py-1.5 rounded-full shadow-sm border border-secondary/20">
+                <div className="shrink-0 max-w-[100px]">
+                  <p className="text-[10px] font-black uppercase tracking-tighter text-secondary bg-secondary/10 px-3 py-1.5 rounded-[16px] shadow-sm border border-secondary/20 text-center line-clamp-2 leading-tight">
                     {schedule.location}
                   </p>
                 </div>
