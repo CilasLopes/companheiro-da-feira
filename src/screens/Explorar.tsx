@@ -90,37 +90,37 @@ export const Explorar = ({ onNavigate, recipes, seasonalItems, events, fairSched
               initial={{ opacity: 0, x: idx % 2 === 0 ? -20 : 20 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
-              className="relative overflow-hidden bg-white/60 backdrop-blur-md p-5 rounded-[32px] flex items-center justify-between shadow-xl shadow-primary/5 border border-white/40"
+              className="relative overflow-hidden bg-white/60 backdrop-blur-md p-4 rounded-[32px] flex items-center justify-between shadow-xl shadow-primary/5 border border-white/40 gap-2"
             >
               {/* Faixa lateral colorida vibrante */}
               <div className={`absolute top-0 left-0 w-2 h-full bg-gradient-to-b ${idx % 2 === 0 ? 'from-emerald-500 to-primary' : 'from-orange-500 to-secondary'} opacity-100`} />
               
-              <div className="flex items-center gap-5 pl-3">
-                <div className={`w-14 h-14 rounded-[22px] flex items-center justify-center shrink-0 shadow-lg ${idx % 2 === 0 ? 'bg-emerald-50 text-emerald-600' : 'bg-orange-50 text-orange-600'}`}>
-                  <Clock size={24} strokeWidth={2.5} />
+              <div className="flex items-center gap-3 pl-2 flex-1 min-w-0">
+                <div className={`w-12 h-12 rounded-[20px] flex items-center justify-center shrink-0 shadow-lg ${idx % 2 === 0 ? 'bg-emerald-50 text-emerald-600' : 'bg-orange-50 text-orange-600'}`}>
+                  <Clock size={22} strokeWidth={2.5} />
                 </div>
-                <div className="space-y-0.5">
-                  <p className="text-[10px] font-black uppercase tracking-[0.2em] text-on-surface-variant/40">
+                <div className="space-y-0.5 min-w-0">
+                  <p className="text-[10px] font-black uppercase tracking-[0.2em] text-on-surface-variant/40 truncate">
                     {t('explore.agenda_title')}
                   </p>
-                  <p className="font-display font-bold text-primary text-xl leading-tight">
+                  <p className="font-display font-bold text-primary text-lg leading-tight truncate">
                     {t(`home.days.${schedule.day}`)},{' '}
-                    <span className="text-secondary font-black">
+                    <span className="text-secondary font-black truncate block">
                       {schedule.startTime} às {schedule.endTime}
                     </span>
                   </p>
                   {schedule.accessibility && (
                     <div className="flex items-center gap-1.5 pt-1">
-                      <div className="w-1 h-1 rounded-full bg-secondary" />
-                      <span className="text-[10px] font-bold text-on-surface-variant/60 uppercase tracking-wider">{schedule.accessibility}</span>
+                      <div className="w-1 h-1 rounded-full bg-secondary shrink-0" />
+                      <span className="text-[9px] font-bold text-on-surface-variant/60 uppercase tracking-wider truncate">{schedule.accessibility}</span>
                     </div>
                   )}
                 </div>
               </div>
-              <div className="shrink-0 pl-2">
-                <div className="bg-white shadow-sm border border-outline-variant/30 px-4 py-2 rounded-2xl flex flex-col items-center">
+              <div className="shrink-0 max-w-[100px]">
+                <div className="bg-white shadow-sm border border-outline-variant/30 px-3 py-2 rounded-2xl flex flex-col items-center text-center">
                   <span className="text-[8px] font-black uppercase text-on-surface-variant/40 leading-none mb-1">Local</span>
-                  <p className="text-[11px] font-black uppercase tracking-tighter text-primary">
+                  <p className="text-[10px] font-black uppercase tracking-tighter text-primary line-clamp-2 leading-tight">
                     {schedule.location}
                   </p>
                 </div>

@@ -167,8 +167,47 @@ export const ProducerPanel = ({ producers, setProducers, products, setProducts, 
   // ─── LOGIN SCREEN ───────────────────────────────────────────────
   if (step === 'login') return (
     <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-      className="fixed inset-0 z-[200] bg-surface flex flex-col">
+      className="fixed inset-0 z-[200] bg-surface flex flex-col overflow-hidden">
       
+      {/* Falling Leaves Background */}
+      <div className="absolute inset-0 pointer-events-none overflow-hidden z-0">
+        {Array.from({ length: 12 }).map((_, i) => {
+          const size = 16 + Math.random() * 14;
+          const startX = Math.random() * 100;
+          const duration = 8 + Math.random() * 10;
+          const delay = Math.random() * 8;
+          const swayAmount = 30 + Math.random() * 60;
+          const leafEmojis = ['🍃', '🌿', '🍀', '☘️', '🌱'];
+          const emoji = leafEmojis[i % leafEmojis.length];
+          
+          return (
+            <motion.div
+              key={i}
+              initial={{ 
+                x: `${startX}vw`, 
+                y: -40,
+                rotate: 0,
+                opacity: 0 
+              }}
+              animate={{ 
+                y: ['0vh', '105vh'],
+                x: [`${startX}vw`, `${startX + (Math.random() > 0.5 ? swayAmount/10 : -swayAmount/10)}vw`],
+                rotate: [0, Math.random() > 0.5 ? 360 : -360],
+                opacity: [0, 0.35, 0.35, 0]
+              }}
+              transition={{ 
+                duration,
+                delay,
+                repeat: Infinity,
+                ease: 'linear'
+              }}
+              style={{ fontSize: size, position: 'absolute', top: -40 }}
+            >
+              {emoji}
+            </motion.div>
+          );
+        })}
+      </div>
       {/* Header da Tela de Login */}
       <div className="flex items-center justify-between px-6 py-5 border-b border-outline-variant/10 bg-white">
         <div className="flex items-center gap-3">
