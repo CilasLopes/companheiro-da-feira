@@ -1,5 +1,5 @@
 import React, { useState, useRef, useCallback } from 'react';
-import { Camera, Loader2, Check, AlertCircle, X, Scissors } from 'lucide-react';
+import { Camera, Loader2, Check, AlertCircle, X, Scissors, Image as ImageIcon } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import Cropper from 'react-easy-crop';
 import { uploadImageToDrive } from '../services/imageService';
@@ -29,7 +29,9 @@ export const ImageUploadField: React.FC<ImageUploadFieldProps> = ({
 }) => {
   const [uploading, setUploading] = useState(false);
   const [status, setStatus] = useState<'idle' | 'success' | 'error'>('idle');
+  const [showMenu, setShowMenu] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const cameraInputRef = useRef<HTMLInputElement>(null);
 
   // Cropper states
   const [imageToCrop, setImageToCrop] = useState<string | null>(null);
@@ -127,28 +129,83 @@ export const ImageUploadField: React.FC<ImageUploadFieldProps> = ({
           )}
         </div>
         
-        <button
-          type="button"
-          disabled={uploading}
-          onClick={() => fileInputRef.current?.click()}
-          className={`shrink-0 w-12 h-12 rounded-xl flex items-center justify-center transition-all shadow-sm border ${
-            uploading 
-              ? 'bg-surface-container text-on-surface-variant' 
-              : 'bg-primary/10 text-primary border-primary/20 hover:bg-primary hover:text-white'
-          }`}
-        >
-          {uploading ? (
-            <Loader2 size={20} className="animate-spin" />
-          ) : (
-            <Camera size={20} />
-          )}
-        </button>
+        <div className="relative">
+          <button
+            type="button"
+            disabled={uploading}
+            onClick={() => setShowMenu(!showMenu)}
+            className={`shrink-0 w-12 h-12 rounded-xl flex items-center justify-center transition-all shadow-sm border ${
+              uploading 
+                ? 'bg-surface-container text-on-surface-variant' 
+                : 'bg-primary/10 text-primary border-primary/20 hover:bg-primary hover:text-white'
+            }`}
+          >
+            {uploading ? (
+              <Loader2 size={20} className="animate-spin" />
+            ) : (
+              <Camera size={20} />
+            )}
+          </button>
+
+          <AnimatePresence>
+            {showMenu && (
+              <>
+                <div 
+                  className="fixed inset-0 z-[100]" 
+                  onClick={() => setShowMenu(false)}
+                />
+                <motion.div 
+                  initial={{ opacity: 0, y: 10, scale: 0.95 }}
+                  animate={{ opacity: 1, y: 0, scale: 1 }}
+                  exit={{ opacity: 0, y: 10, scale: 0.95 }}
+                  className="absolute right-0 bottom-full mb-2 w-56 bg-surface rounded-xl shadow-xl border border-outline-variant/30 overflow-hidden z-[101]"
+                >
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setShowMenu(false);
+                      cameraInputRef.current?.click();
+                    }}
+                    className="w-full flex items-center gap-3 px-4 py-4 text-sm font-medium text-on-surface hover:bg-surface-container transition-colors active:bg-outline-variant/20"
+                  >
+                    <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center shrink-0">
+                      <Camera size={16} className="text-primary" />
+                    </div>
+                    Tirar Foto
+                  </button>
+                  <div className="h-px w-full bg-outline-variant/30" />
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setShowMenu(false);
+                      fileInputRef.current?.click();
+                    }}
+                    className="w-full flex items-center gap-3 px-4 py-4 text-sm font-medium text-on-surface hover:bg-surface-container transition-colors active:bg-outline-variant/20"
+                  >
+                    <div className="w-8 h-8 rounded-full bg-emerald-500/10 flex items-center justify-center shrink-0">
+                      <ImageIcon size={16} className="text-emerald-600" />
+                    </div>
+                    Escolher da Galeria
+                  </button>
+                </motion.div>
+              </>
+            )}
+          </AnimatePresence>
+        </div>
 
         <input
           type="file"
           ref={fileInputRef}
           onChange={handleFileChange}
           accept="image/*"
+          className="hidden"
+        />
+        <input
+          type="file"
+          ref={cameraInputRef}
+          onChange={handleFileChange}
+          accept="image/*"
+          capture="environment"
           className="hidden"
         />
       </div>
