@@ -194,14 +194,22 @@ export const Lista = ({ items, setItems, savedLists, setSavedLists }: { items: a
             </button>
             <span className="text-[9px] font-black text-primary uppercase tracking-tighter">{t('list.new')}</span>
           </div>
-      {/* Progress Bar Container - Static */}
-      <div className="h-8 -mx-6">
-        <div className="px-6 py-3 bg-transparent">
-          <div className="w-full bg-surface-container-high h-2 rounded-full overflow-hidden shadow-inner">
+      {/* Progress Bar Container - Fixed floating above BottomNav */}
+      <div className="fixed bottom-[80px] left-4 right-4 z-[90] pointer-events-none">
+        <div className="bg-white/80 backdrop-blur-xl p-3.5 rounded-[24px] shadow-[0_8px_32px_rgba(0,0,0,0.08)] border border-white/60 transition-all">
+          <div className="flex justify-between items-center mb-2 px-1">
+            <span className="text-[10px] font-bold text-stone-500 uppercase tracking-widest">
+              Progresso da Compra
+            </span>
+            <span className="text-[10px] font-black text-primary bg-primary/10 px-2 py-0.5 rounded-full">
+              {Math.round(progress)}%
+            </span>
+          </div>
+          <div className="w-full bg-stone-200/50 h-2.5 rounded-full overflow-hidden shadow-inner relative">
             <motion.div 
               initial={{ width: 0 }}
               animate={{ width: `${progress}%` }}
-              className="h-full bg-primary rounded-full shadow-[0_0_10px_rgba(0,0,0,0.2)]"
+              className="absolute top-0 left-0 bottom-0 bg-primary rounded-full"
             />
           </div>
         </div>
