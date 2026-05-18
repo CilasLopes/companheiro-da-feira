@@ -318,7 +318,7 @@ function App() {
         )}
 
       {!isLoading && (
-        <main className="overflow-x-hidden w-full pt-20">
+        <main className="w-full pt-20">
           <AnimatePresence mode="wait">
           <motion.div
             key={activeTab}
