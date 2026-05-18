@@ -149,7 +149,6 @@ export const ImageUploadField: React.FC<ImageUploadFieldProps> = ({
           ref={fileInputRef}
           onChange={handleFileChange}
           accept="image/*"
-          capture="environment"
           className="hidden"
         />
       </div>
