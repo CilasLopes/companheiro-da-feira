@@ -218,6 +218,8 @@ export const Lista = ({ items, setItems, savedLists, setSavedLists }: { items: a
         </div>
       </div>
 
+      </div>
+
       <AnimatePresence>
         {isEditing && (
           <motion.div 
@@ -502,6 +504,7 @@ export const Lista = ({ items, setItems, savedLists, setSavedLists }: { items: a
           </motion.div>
         )}
       </AnimatePresence>
+    </div>
     </div>
   );
 };
