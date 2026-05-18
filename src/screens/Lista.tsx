@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { useTranslation } from 'react-i18next';
 import { Check, Edit2, Trash2, Plus, ShoppingBasket, Send, Eraser, Save, History, Search, FileText, X } from 'lucide-react';
@@ -13,6 +13,16 @@ export const Lista = ({ items, setItems, savedLists, setSavedLists }: { items: a
   const [tempListName, setTempListName] = useState('');
   const [searchQuery, setSearchQuery] = useState('');
   const [newItem, setNewItem] = useState({ name: '', desc: '', category: 'Outros' });
+  const [isSticky, setIsSticky] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      // The buttons and title take up about 180px
+      setIsSticky(window.scrollY > 180);
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   const toggleItem = (id: number) => {
     setItems(items.map((item: any) => item.id === id ? { ...item, found: !item.found, bought: !item.found } : item));
@@ -193,16 +203,20 @@ export const Lista = ({ items, setItems, savedLists, setSavedLists }: { items: a
             </button>
             <span className="text-[9px] font-black text-primary uppercase tracking-tighter">{t('list.new')}</span>
           </div>
-        </div>
-      </div>
-
-      <div className="sticky top-16 z-30 -mx-6 px-6 py-3 bg-surface/95 backdrop-blur-xl shadow-[0_8px_30px_-15px_rgba(0,0,0,0.15)] border-b border-outline-variant/10">
-        <div className="w-full bg-surface-container-high h-2 rounded-full overflow-hidden shadow-inner">
-          <motion.div 
-            initial={{ width: 0 }}
-            animate={{ width: `${progress}%` }}
-            className="h-full bg-primary rounded-full shadow-[0_0_10px_rgba(0,0,0,0.2)]"
-          />
+      {/* Progress Bar Container */}
+      <div className="h-8 -mx-6">
+        <div className={`px-6 py-3 transition-all duration-200 ${
+          isSticky 
+            ? "fixed top-16 left-0 right-0 z-40 bg-surface/95 backdrop-blur-xl shadow-[0_8px_30px_-15px_rgba(0,0,0,0.15)] border-b border-outline-variant/10"
+            : "bg-transparent"
+        }`}>
+          <div className="w-full bg-surface-container-high h-2 rounded-full overflow-hidden shadow-inner">
+            <motion.div 
+              initial={{ width: 0 }}
+              animate={{ width: `${progress}%` }}
+              className="h-full bg-primary rounded-full shadow-[0_0_10px_rgba(0,0,0,0.2)]"
+            />
+          </div>
         </div>
       </div>
 
