@@ -224,7 +224,7 @@ export const Header = ({
           </div>
         </div>
         {listProgress !== undefined && (
-          <div className="absolute bottom-0 left-0 right-0 h-1 bg-stone-100/50 overflow-hidden">
+          <div className="absolute bottom-0 left-0 right-0 h-2 bg-stone-100/50 overflow-hidden">
             <motion.div 
               initial={{ width: 0 }}
               animate={{ width: `${listProgress}%` }}
