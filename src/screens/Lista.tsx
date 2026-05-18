@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { motion, AnimatePresence } from 'motion/react';
 import { useTranslation } from 'react-i18next';
 import { Check, Edit2, Trash2, Plus, ShoppingBasket, Send, Eraser, Save, History, Search, FileText, X } from 'lucide-react';
@@ -205,11 +206,21 @@ export const Lista = ({ items, setItems, savedLists, setSavedLists }: { items: a
           </div>
       {/* Progress Bar Container */}
       <div className="h-8 -mx-6">
-        <div className={`px-6 py-3 transition-all duration-200 ${
-          isSticky 
-            ? "fixed top-16 left-0 right-0 z-40 bg-surface/95 backdrop-blur-xl shadow-[0_8px_30px_-15px_rgba(0,0,0,0.15)] border-b border-outline-variant/10"
-            : "bg-transparent"
-        }`}>
+        {!isSticky && (
+          <div className="px-6 py-3 bg-transparent">
+            <div className="w-full bg-surface-container-high h-2 rounded-full overflow-hidden shadow-inner">
+              <motion.div 
+                initial={{ width: 0 }}
+                animate={{ width: `${progress}%` }}
+                className="h-full bg-primary rounded-full shadow-[0_0_10px_rgba(0,0,0,0.2)]"
+              />
+            </div>
+          </div>
+        )}
+      </div>
+
+      {isSticky && createPortal(
+        <div className="fixed top-16 left-0 right-0 z-40 bg-surface/95 backdrop-blur-xl shadow-[0_8px_30px_-15px_rgba(0,0,0,0.15)] border-b border-outline-variant/10 px-6 py-3 transition-all duration-200">
           <div className="w-full bg-surface-container-high h-2 rounded-full overflow-hidden shadow-inner">
             <motion.div 
               initial={{ width: 0 }}
@@ -217,8 +228,9 @@ export const Lista = ({ items, setItems, savedLists, setSavedLists }: { items: a
               className="h-full bg-primary rounded-full shadow-[0_0_10px_rgba(0,0,0,0.2)]"
             />
           </div>
-        </div>
-      </div>
+        </div>,
+        document.body
+      )}
 
       <AnimatePresence>
         {isEditing && (
