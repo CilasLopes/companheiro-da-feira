@@ -314,22 +314,8 @@ function App() {
             onProducerClick={() => setShowProducerPanel(true)}
             notifications={notifications}
             setNotifications={setNotifications}
+            listProgress={activeTab === 'list' ? (items.length === 0 ? 0 : (items.filter((i: any) => i.bought).length / items.length) * 100) : undefined}
           />
-        )}
-
-        {/* Barra de Progresso Fixa Global para contornar bug do iOS/Framer Motion */}
-        {!isLoading && activeTab === 'list' && (
-          <div className={`fixed top-[64px] left-0 right-0 z-40 px-6 py-3 transition-all duration-300 ${
-            isScrolled ? 'opacity-100 translate-y-0 bg-surface/95 backdrop-blur-xl shadow-[0_8px_30px_-15px_rgba(0,0,0,0.15)] border-b border-outline-variant/10' : 'opacity-0 -translate-y-4 pointer-events-none bg-transparent'
-          }`}>
-            <div className="w-full bg-surface-container-high h-2 rounded-full overflow-hidden shadow-inner">
-              <motion.div 
-                initial={{ width: 0 }}
-                animate={{ width: `${items.length === 0 ? 0 : (items.filter((i: any) => i.bought).length / items.length) * 100}%` }}
-                className="h-full bg-primary rounded-full shadow-[0_0_10px_rgba(0,0,0,0.2)]"
-              />
-            </div>
-          </div>
         )}
 
       {!isLoading && (

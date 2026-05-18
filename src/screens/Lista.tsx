@@ -194,24 +194,27 @@ export const Lista = ({ items, setItems, savedLists, setSavedLists }: { items: a
             </button>
             <span className="text-[9px] font-black text-primary uppercase tracking-tighter">{t('list.new')}</span>
           </div>
-      {/* Progress Bar Container - Fixed floating above BottomNav */}
-      <div className="fixed bottom-[80px] left-4 right-4 z-[90] pointer-events-none">
-        <div className="bg-white/80 backdrop-blur-xl p-3.5 rounded-[24px] shadow-[0_8px_32px_rgba(0,0,0,0.08)] border border-white/60 transition-all">
-          <div className="flex justify-between items-center mb-2 px-1">
-            <span className="text-[10px] font-bold text-stone-500 uppercase tracking-widest">
-              Progresso da Compra
+      {/* Progress Bar Container - Premium Static Card */}
+      <div className="bg-gradient-to-br from-emerald-50/70 to-teal-50/20 border border-emerald-100/50 p-5 rounded-[28px] shadow-sm">
+        <div className="flex justify-between items-center mb-3">
+          <div>
+            <span className="text-[10px] font-bold text-emerald-800/80 uppercase tracking-widest block mb-0.5">
+              Status da Feira
             </span>
-            <span className="text-[10px] font-black text-primary bg-primary/10 px-2 py-0.5 rounded-full">
-              {Math.round(progress)}%
-            </span>
+            <p className="text-sm text-stone-600 font-semibold">
+              {boughtItems} de {totalItems} itens no carrinho
+            </p>
           </div>
-          <div className="w-full bg-stone-200/50 h-2.5 rounded-full overflow-hidden shadow-inner relative">
-            <motion.div 
-              initial={{ width: 0 }}
-              animate={{ width: `${progress}%` }}
-              className="absolute top-0 left-0 bottom-0 bg-primary rounded-full"
-            />
-          </div>
+          <span className="text-sm font-black text-emerald-700 bg-emerald-100/60 px-3 py-1 rounded-2xl">
+            {Math.round(progress)}%
+          </span>
+        </div>
+        <div className="w-full bg-stone-200/40 h-3 rounded-full overflow-hidden shadow-inner relative">
+          <motion.div 
+            initial={{ width: 0 }}
+            animate={{ width: `${progress}%` }}
+            className="absolute top-0 left-0 bottom-0 bg-gradient-to-r from-emerald-600 to-teal-500 rounded-full shadow-[0_1px_4px_rgba(5,150,105,0.2)]"
+          />
         </div>
       </div>
 

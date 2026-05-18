@@ -10,7 +10,8 @@ export const Header = ({
   onAdminClick,
   onProducerClick,
   notifications = [],
-  setNotifications
+  setNotifications,
+  listProgress
 }: { 
   title: string, 
   showBack?: boolean, 
@@ -18,7 +19,8 @@ export const Header = ({
   onAdminClick?: () => void,
   onProducerClick?: () => void,
   notifications?: any[],
-  setNotifications?: any
+  setNotifications?: any,
+  listProgress?: number
 }) => {
   const { t, i18n } = useTranslation();
   const [showNotifications, setShowNotifications] = useState(false);
@@ -221,6 +223,16 @@ export const Header = ({
             </AnimatePresence>
           </div>
         </div>
+        {listProgress !== undefined && (
+          <div className="absolute bottom-0 left-0 right-0 h-1 bg-stone-100/50 overflow-hidden">
+            <motion.div 
+              initial={{ width: 0 }}
+              animate={{ width: `${listProgress}%` }}
+              className="h-full bg-primary"
+              transition={{ type: "spring", stiffness: 300, damping: 30 }}
+            />
+          </div>
+        )}
       </header>
     </>
   );
