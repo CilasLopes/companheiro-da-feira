@@ -196,12 +196,14 @@ export const Lista = ({ items, setItems, savedLists, setSavedLists }: { items: a
         </div>
       </div>
 
-      <div className="w-full bg-surface-container-high h-2 rounded-full overflow-hidden">
-        <motion.div 
-          initial={{ width: 0 }}
-          animate={{ width: `${progress}%` }}
-          className="h-full bg-primary"
-        />
+      <div className="sticky top-16 z-30 -mx-6 px-6 py-3 bg-surface/95 backdrop-blur-xl shadow-[0_8px_30px_-15px_rgba(0,0,0,0.15)] border-b border-outline-variant/10">
+        <div className="w-full bg-surface-container-high h-2 rounded-full overflow-hidden shadow-inner">
+          <motion.div 
+            initial={{ width: 0 }}
+            animate={{ width: `${progress}%` }}
+            className="h-full bg-primary rounded-full shadow-[0_0_10px_rgba(0,0,0,0.2)]"
+          />
+        </div>
       </div>
 
       <AnimatePresence>
