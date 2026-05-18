@@ -209,7 +209,7 @@ export const Lista = ({ items, setItems, savedLists, setSavedLists }: { items: a
             {Math.round(progress)}%
           </span>
         </div>
-        <div className="w-full bg-stone-200/40 h-3 rounded-full overflow-hidden shadow-inner relative">
+        <div className="w-full bg-stone-200/40 h-4 rounded-full overflow-hidden shadow-inner relative">
           <motion.div 
             initial={{ width: 0 }}
             animate={{ width: `${progress}%` }}
