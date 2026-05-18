@@ -194,6 +194,7 @@ export const Lista = ({ items, setItems, savedLists, setSavedLists }: { items: a
             </button>
             <span className="text-[9px] font-black text-primary uppercase tracking-tighter">{t('list.new')}</span>
           </div>
+        </div>
       {/* Progress Bar Container - Premium Static Card */}
       <div className="bg-gradient-to-br from-emerald-50/70 to-teal-50/20 border border-emerald-100/50 p-5 rounded-[28px] shadow-sm">
         <div className="flex justify-between items-center mb-3">
@@ -504,7 +505,6 @@ export const Lista = ({ items, setItems, savedLists, setSavedLists }: { items: a
           </motion.div>
         )}
       </AnimatePresence>
-    </div>
     </div>
   );
 };
