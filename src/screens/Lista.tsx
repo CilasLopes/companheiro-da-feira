@@ -14,16 +14,6 @@ export const Lista = ({ items, setItems, savedLists, setSavedLists }: { items: a
   const [tempListName, setTempListName] = useState('');
   const [searchQuery, setSearchQuery] = useState('');
   const [newItem, setNewItem] = useState({ name: '', desc: '', category: 'Outros' });
-  const [isSticky, setIsSticky] = useState(false);
-
-  useEffect(() => {
-    const handleScroll = () => {
-      // The buttons and title take up about 180px
-      setIsSticky(window.scrollY > 180);
-    };
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
 
   const toggleItem = (id: number) => {
     setItems(items.map((item: any) => item.id === id ? { ...item, found: !item.found, bought: !item.found } : item));
@@ -204,23 +194,9 @@ export const Lista = ({ items, setItems, savedLists, setSavedLists }: { items: a
             </button>
             <span className="text-[9px] font-black text-primary uppercase tracking-tighter">{t('list.new')}</span>
           </div>
-      {/* Progress Bar Container */}
+      {/* Progress Bar Container - Static */}
       <div className="h-8 -mx-6">
-        {!isSticky && (
-          <div className="px-6 py-3 bg-transparent">
-            <div className="w-full bg-surface-container-high h-2 rounded-full overflow-hidden shadow-inner">
-              <motion.div 
-                initial={{ width: 0 }}
-                animate={{ width: `${progress}%` }}
-                className="h-full bg-primary rounded-full shadow-[0_0_10px_rgba(0,0,0,0.2)]"
-              />
-            </div>
-          </div>
-        )}
-      </div>
-
-      {isSticky && createPortal(
-        <div className="fixed top-16 left-0 right-0 z-40 bg-surface/95 backdrop-blur-xl shadow-[0_8px_30px_-15px_rgba(0,0,0,0.15)] border-b border-outline-variant/10 px-6 py-3 transition-all duration-200">
+        <div className="px-6 py-3 bg-transparent">
           <div className="w-full bg-surface-container-high h-2 rounded-full overflow-hidden shadow-inner">
             <motion.div 
               initial={{ width: 0 }}
@@ -228,9 +204,8 @@ export const Lista = ({ items, setItems, savedLists, setSavedLists }: { items: a
               className="h-full bg-primary rounded-full shadow-[0_0_10px_rgba(0,0,0,0.2)]"
             />
           </div>
-        </div>,
-        document.body
-      )}
+        </div>
+      </div>
 
       <AnimatePresence>
         {isEditing && (
