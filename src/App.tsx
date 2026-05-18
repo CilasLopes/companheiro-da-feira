@@ -43,6 +43,12 @@ function App() {
     }, 2500); // Mostra o splash por 2.5 segundos
     return () => clearTimeout(timer);
   }, []);
+
+  // Reset scroll to top instantly on screen changes for absolute fluid navigation
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'instant' as any });
+  }, [activeTab]);
+
   const [savedLists, setSavedLists] = useState(() => {
     const saved = localStorage.getItem('savedLists');
     return saved ? JSON.parse(saved) : [];
@@ -319,16 +325,14 @@ function App() {
         )}
 
       {!isLoading && (
-        <main className="w-full pt-20">
+        <main className="w-full pt-20 overflow-x-hidden">
           <AnimatePresence mode="wait">
           <motion.div
             key={activeTab}
-            initial={{ opacity: 0, x: 20 }}
-            animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: -20 }}
-            transition={{ duration: 0.25, ease: "easeOut" }}
-            transformTemplate={(_, generated) => generated.includes('translateX(0px)') || generated === 'none' ? 'none' : generated}
-            style={{ willChange: 'auto' }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.15, ease: "easeInOut" }}
             className="w-full min-h-screen"
           >
             {renderContent()}
