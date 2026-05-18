@@ -75,6 +75,7 @@ export const PullToRefresh = ({ children, onRefresh }: { children: React.ReactNo
         transition={{ type: 'spring', stiffness: 400, damping: 30 }}
         transformTemplate={(props, generated) => (!refreshing && distance === 0) ? 'none' : generated}
         className="w-full relative z-10 bg-surface min-h-screen"
+        style={{ willChange: (!refreshing && distance === 0) ? 'auto' : 'transform' }}
       >
         {children}
       </motion.div>

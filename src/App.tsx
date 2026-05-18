@@ -326,6 +326,8 @@ function App() {
             animate={{ opacity: 1, x: 0 }}
             exit={{ opacity: 0, x: -20 }}
             transition={{ duration: 0.25, ease: "easeOut" }}
+            transformTemplate={(_, generated) => generated.includes('translateX(0px)') || generated === 'none' ? 'none' : generated}
+            style={{ willChange: 'auto' }}
             className="w-full min-h-screen"
           >
             {renderContent()}
