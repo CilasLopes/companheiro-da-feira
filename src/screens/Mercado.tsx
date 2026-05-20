@@ -111,7 +111,7 @@ export const Mercado = ({ products, producers = [], onNavigate, onAddToList, ite
   return (
     <div className="bg-white min-h-screen pb-40">
       {/* Header Estilo iFood Premium */}
-      <header className="fixed top-0 left-0 right-0 bg-surface/95 backdrop-blur-xl z-50 px-4 pt-3 pb-2 border-b border-outline-variant/10 shadow-sm">
+      <header className="fixed top-0 left-0 right-0 bg-surface/95 backdrop-blur-xl z-50 px-4 pt-3 pb-2 border-b border-outline-variant/10 shadow-sm md:max-w-[450px] md:left-1/2 md:-translate-x-1/2 md:border-x md:border-outline-variant/15">
         <div className="flex items-center justify-between h-10 gap-4">
           <button 
             onClick={() => {
@@ -283,7 +283,7 @@ export const Mercado = ({ products, producers = [], onNavigate, onAddToList, ite
             initial={{ y: 100 }}
             animate={{ y: 0 }}
             exit={{ y: 100 }}
-            className="fixed bottom-24 left-4 right-4 z-50"
+            className="fixed bottom-24 left-4 right-4 z-50 md:max-w-[418px] md:left-1/2 md:right-auto md:-translate-x-1/2 md:w-full"
           >
             <button 
               onClick={() => onNavigate('list')}
