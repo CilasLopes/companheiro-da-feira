@@ -307,45 +307,51 @@ function App() {
 
   return (
     <PullToRefresh onRefresh={handleRefresh}>
-      <div className="min-h-screen bg-surface font-sans text-on-surface selection:bg-primary/20">
-        <AnimatePresence>
-          {isLoading && <SplashScreen />}
-        </AnimatePresence>
+      <div className="min-h-screen md:bg-surface-container-highest flex justify-center items-start bg-surface font-sans text-on-surface selection:bg-primary/20">
+        
+        {/* Contêiner de tamanho de smartphone para o app principal, apenas em telas grandes (md:) */}
+        <div className="w-full min-h-screen flex flex-col relative md:max-w-[450px] md:shadow-[0_0_40px_rgba(0,0,0,0.08)] md:border-x md:border-outline-variant/20 md:bg-surface">
+          
+          <AnimatePresence>
+            {isLoading && <SplashScreen />}
+          </AnimatePresence>
 
-        {!isLoading && activeTab !== 'market' && (
-          <Header 
-            title={getPageTitle()} 
-            showBack={activeTab !== 'home'} 
-            onBack={() => setActiveTab('home')}
-            onProducerClick={() => setShowProducerPanel(true)}
-            notifications={notifications}
-            setNotifications={setNotifications}
-            listProgress={activeTab === 'list' ? (items.length === 0 ? 0 : (items.filter((i: any) => i.bought).length / items.length) * 100) : undefined}
-          />
-        )}
+          {!isLoading && activeTab !== 'market' && (
+            <Header 
+              title={getPageTitle()} 
+              showBack={activeTab !== 'home'} 
+              onBack={() => setActiveTab('home')}
+              onProducerClick={() => setShowProducerPanel(true)}
+              notifications={notifications}
+              setNotifications={setNotifications}
+              listProgress={activeTab === 'list' ? (items.length === 0 ? 0 : (items.filter((i: any) => i.bought).length / items.length) * 100) : undefined}
+            />
+          )}
 
-      {!isLoading && (
-        <main className="w-full pt-20 overflow-x-hidden">
-          <AnimatePresence mode="wait">
-          <motion.div
-            key={activeTab}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.15, ease: "easeInOut" }}
-            className="w-full min-h-screen"
-          >
-            {renderContent()}
-          </motion.div>
-        </AnimatePresence>
-      </main>
-      )}
+          {!isLoading && (
+            <main className="w-full pt-20 overflow-x-hidden flex-1">
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={activeTab}
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 0.15, ease: "easeInOut" }}
+                  className="w-full min-h-screen"
+                >
+                  {renderContent()}
+                </motion.div>
+              </AnimatePresence>
+            </main>
+          )}
 
-      {/* Bottom Navigation */}
-      {!isLoading && <BottomNav activeTab={activeTab} setActiveTab={setActiveTab} listCount={items.length} />}
+          {/* Bottom Navigation */}
+          {!isLoading && <BottomNav activeTab={activeTab} setActiveTab={setActiveTab} listCount={items.length} />}
+          
+        </div>
 
-      {/* PWA Install prompt - always mounted, controls its own visibility */}
-      <InstallPWA />
+        {/* PWA Install prompt - always mounted, controls its own visibility */}
+        <InstallPWA />
 
       <AnimatePresence>
         {showWelcome && (

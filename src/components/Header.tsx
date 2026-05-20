@@ -53,7 +53,7 @@ export const Header = ({
 
   return (
     <>
-      <header className="fixed top-0 left-0 w-full z-50 flex justify-between items-center px-6 py-4 bg-surface/90 backdrop-blur-xl border-b border-outline-variant/10">
+      <header className="fixed top-0 left-0 w-full z-50 flex justify-between items-center px-6 py-4 bg-surface/90 backdrop-blur-xl border-b border-outline-variant/10 md:max-w-[450px] md:left-1/2 md:-translate-x-1/2 md:border-x md:border-outline-variant/15">
         <div className="flex items-center gap-4">
           {showBack && onBack && (
             <button onClick={onBack} className="p-1 -ml-2 rounded-full hover:bg-surface-container-high active:scale-95 transition-all text-primary">

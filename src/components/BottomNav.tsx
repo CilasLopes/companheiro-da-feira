@@ -14,7 +14,7 @@ export const BottomNav = ({ activeTab, setActiveTab, listCount = 0 }: { activeTa
   ];
 
   return (
-    <nav className="fixed bottom-3 left-4 right-4 z-[100] flex justify-center items-center px-2 py-1.5 bg-white/20 backdrop-blur-2xl border border-white/40 rounded-[28px] shadow-[0_8px_32px_0_rgba(31,38,135,0.07)] transition-all animate-in fade-in slide-in-from-bottom-4 duration-1000">
+    <nav className="fixed bottom-3 left-4 right-4 z-[100] flex justify-center items-center px-2 py-1.5 bg-white/20 backdrop-blur-2xl border border-white/40 rounded-[28px] shadow-[0_8px_32px_0_rgba(31,38,135,0.07)] transition-all animate-in fade-in slide-in-from-bottom-4 duration-1000 md:max-w-[418px] md:left-1/2 md:right-auto md:-translate-x-1/2 md:w-full">
       <ul className="flex items-center gap-1.5 w-full justify-around">
         {tabs.map(({ id, label, icon: Icon, gradientFrom, gradientTo }) => {
           const isActive = activeTab === id;
